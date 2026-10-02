@@ -1,6 +1,6 @@
 import { createTimeline } from "animejs";
 
-import { canUseExtendedMotion } from "./eligibility";
+import { setupExtendedScrollMotion } from "./extended-scroll";
 import { createMotionScope } from "./scope";
 
 export function setupTindaTrackSequence(root: HTMLElement) {
@@ -43,10 +43,16 @@ export function setupTindaTrackSequence(root: HTMLElement) {
     return null;
   }
 
-  const scope = createMotionScope(root, () => {
-    let frameId = 0;
-    let enhanced = false;
+  const stage = root.querySelector<HTMLElement>("[data-sequence-stage]");
+  const panels = Array.from(
+    root.querySelectorAll<HTMLElement>("[data-sequence-panel]"),
+  );
+  const layouts = Array.from(
+    root.querySelectorAll<HTMLElement>("[data-sequence-layout]"),
+  );
+  if (!stage || panels.length !== 2 || layouts.length !== 2) return null;
 
+  const scope = createMotionScope(root, () => {
     const timeline = createTimeline({
       autoplay: false,
     })
@@ -157,98 +163,54 @@ export function setupTindaTrackSequence(root: HTMLElement) {
       delete root.dataset.phase;
     };
 
-    const update = () => {
-      frameId = 0;
-
-      if (!enhanced) {
-        return;
-      }
-
-      const rect = root.getBoundingClientRect();
-
-      const scrollDistance = root.offsetHeight - window.innerHeight;
-
-      if (scrollDistance <= 0) {
-        return;
-      }
-
-      const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
-
-      timeline.seek(timeline.duration * progress, true);
-
-      root.dataset.phase = progress < 0.55 ? "sell" : "track";
-
-      if (progressFill) {
-        progressFill.style.transform = `scaleX(${progress})`;
-      }
-    };
-
-    const scheduleUpdate = () => {
-      if (frameId !== 0) {
-        return;
-      }
-
-      frameId = window.requestAnimationFrame(update);
-    };
-
-    const enable = () => {
-      if (enhanced) {
-        return;
-      }
-
-      enhanced = true;
-
-      root.dataset.enhanced = "true";
-
-      update();
-    };
-
-    const disable = () => {
-      if (!enhanced) {
-        return;
-      }
-
-      enhanced = false;
-
-      delete root.dataset.enhanced;
-
-      clearAnimatedStyles();
-    };
-
-    const syncEligibility = () => {
-      if (canUseExtendedMotion()) {
-        enable();
-      } else {
-        disable();
-      }
-    };
-
-    const handleResize = () => {
-      syncEligibility();
-      scheduleUpdate();
-    };
-
-    syncEligibility();
-
-    window.addEventListener("scroll", scheduleUpdate, {
-      passive: true,
+    const controller = setupExtendedScrollMotion(root, {
+      observe: layouts,
+      // Re-seeking a completed child may skip its writes. Restore the whole
+      // timeline when re-entering desktop mode after fallback styles cleared.
+      onEnable: () => timeline.reset(),
+      canEnhance() {
+        // Fall back to normal sections when text, zoom or media cannot fit.
+        const height =
+          root.dataset.enhanced === "true"
+            ? stage.getBoundingClientRect().height
+            : window.innerHeight;
+        return panels.every((panel, index) => {
+          const styles = window.getComputedStyle(panel);
+          const copy = index === 0 ? sellCopy : trackCopy;
+          const media = index === 0 ? sellMedia : trackMedia;
+          const mediaStyles = window.getComputedStyle(media);
+          // The receipt joins normal flow in the fallback, but overlays the
+          // sell image in the stage. Measure the stage's intended content.
+          const receiptHeight =
+            index === 0 && root.dataset.enhanced !== "true"
+              ? (receipt?.offsetHeight ?? 0)
+              : 0;
+          const mediaHeight =
+            media.scrollHeight -
+            receiptHeight -
+            parseFloat(mediaStyles.paddingTop) -
+            parseFloat(mediaStyles.paddingBottom);
+          const required =
+            Math.max(copy.scrollHeight, mediaHeight) +
+            parseFloat(styles.paddingTop) +
+            parseFloat(styles.paddingBottom) +
+            48;
+          return required <= height;
+        });
+      },
+      render() {
+        const rect = root.getBoundingClientRect();
+        const distance = rect.height - stage.getBoundingClientRect().height;
+        if (distance <= 0) return;
+        const progress = Math.min(Math.max(-rect.top / distance, 0), 1);
+        timeline.seek(timeline.duration * progress, true);
+        root.dataset.phase = progress < 0.55 ? "sell" : "track";
+        if (progressFill) progressFill.style.transform = `scaleX(${progress})`;
+      },
+      reset: clearAnimatedStyles,
     });
 
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      if (frameId !== 0) {
-        window.cancelAnimationFrame(frameId);
-      }
-
-      window.removeEventListener("scroll", scheduleUpdate);
-
-      window.removeEventListener("resize", handleResize);
-
-      delete root.dataset.enhanced;
-
-      clearAnimatedStyles();
-    };
+    return () => controller.revert();
   });
 
   return scope;

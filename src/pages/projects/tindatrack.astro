@@ -148,7 +148,7 @@ const reviewMedia = gallery.find((item) => item.role === "review");
         />
       )}
 
-      <TindaTrackReviewHandoff />
+      {sellMedia && trackMedia && reviewMedia && <TindaTrackReviewHandoff />}
 
       {reviewMedia && (
         <CaseStudyChapter
@@ -207,7 +207,12 @@ const reviewMedia = gallery.find((item) => item.role === "review");
   import { setupTindaTrackReviewHandoff } from "@/lib/motion/tindatrack-review-handoff";
   import { setupTindaTrackSequence } from "@/lib/motion/tindatrack-sequence";
 
+  let disposeMotion: (() => void) | undefined;
+
   function initializeTindaTrackMotion() {
+    disposeMotion?.();
+    disposeMotion = undefined;
+
     const root = document.querySelector<HTMLElement>(
       "[data-tindatrack-case-study]",
     );
@@ -252,16 +257,13 @@ const reviewMedia = gallery.find((item) => item.role === "review");
       return;
     }
 
-    document.addEventListener(
-      "astro:before-swap",
-      () => {
-        scopes.forEach((scope) => {
-          scope.revert();
-        });
-      },
-      { once: true },
-    );
+    disposeMotion = () => {
+      scopes.forEach((scope) => scope.revert());
+      disposeMotion = undefined;
+    };
   }
 
+  document.addEventListener("astro:before-swap", () => disposeMotion?.());
+  document.addEventListener("astro:page-load", initializeTindaTrackMotion);
   initializeTindaTrackMotion();
 </script>

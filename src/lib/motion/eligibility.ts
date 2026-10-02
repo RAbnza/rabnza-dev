@@ -1,7 +1,7 @@
 import { shouldReduceMotion } from "./preferences";
 
-const FLAGSHIP_MIN_WIDTH = 1024;
-const FLAGSHIP_MIN_HEIGHT = 720;
+// Match the rem breakpoints used by the layouts, including browser font sizing.
+const FLAGSHIP_QUERY = "(min-width: 64rem) and (min-height: 45rem)";
 
 export function canUseExtendedMotion(): boolean {
   if (typeof window === "undefined") {
@@ -12,8 +12,5 @@ export function canUseExtendedMotion(): boolean {
     return false;
   }
 
-  return (
-    window.innerWidth >= FLAGSHIP_MIN_WIDTH &&
-    window.innerHeight >= FLAGSHIP_MIN_HEIGHT
-  );
+  return window.matchMedia(FLAGSHIP_QUERY).matches;
 }

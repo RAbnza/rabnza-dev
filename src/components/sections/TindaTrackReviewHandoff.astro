@@ -1,117 +1,71 @@
-<section
-  class="review-handoff"
-  data-review-handoff
-  aria-hidden="true"
->
-  <div
-    class="review-handoff-dark"
-    data-review-handoff-dark
-  ></div>
-
-  <div
-    class="review-handoff-lavender"
-    data-review-handoff-lavender
-  ></div>
-
-  <div
-    class="review-handoff-light"
-    data-review-handoff-light
-  ></div>
-
+<div class="review-handoff" data-review-handoff aria-hidden="true">
   <div class="review-handoff-label">
     <span>Track</span>
-
-    <span
-      class="review-handoff-line"
-      data-review-handoff-line
-    ></span>
-
+    <span class="review-handoff-line">
+      <span data-review-handoff-line></span>
+    </span>
     <span>Review</span>
   </div>
-</section>
+</div>
 
 <style>
   .review-handoff {
+    /* Both edges match their chapters, even before JavaScript starts. */
     position: relative;
-    display: none;
-  }
-
-  .review-handoff-dark,
-  .review-handoff-lavender,
-  .review-handoff-light {
-    position: absolute;
-    inset: 0;
-  }
-
-  .review-handoff-dark {
-    z-index: 0;
-    background: var(--night-canvas);
-  }
-
-  .review-handoff-lavender {
-    z-index: 1;
-
-    background: var(--lavender);
-
-    transform: scaleY(0);
-    transform-origin: top center;
-  }
-
-  .review-handoff-light {
-    z-index: 2;
-
-    background: var(--silver-canvas);
-
-    transform: translateY(100%);
+    isolation: isolate;
+    height: clamp(6rem, 16svh, 10rem);
+    overflow: clip;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--night-canvas) 0%,
+      var(--night-canvas) var(--handoff-dark-stop, 18%),
+      var(--lavender) var(--handoff-accent-stop, 50%),
+      var(--silver-canvas) var(--handoff-light-stop, 82%),
+      var(--silver-canvas) 100%
+    );
   }
 
   .review-handoff-label {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    bottom: auto;
-    z-index: 3;
-
+    inset: 50% auto auto 50%;
     display: flex;
-    width: min(
-      22rem,
-      calc(100% - 3rem)
-    );
     align-items: center;
     gap: 0.75rem;
-
+    width: min(22rem, calc(100% - 2.5rem));
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--divider-dark);
+    border-radius: 999px;
     transform: translate(-50%, -50%);
-
+    background: var(--night-canvas);
     color: var(--light-text);
-
     font-family: var(--font-mono);
     font-size: 0.75rem;
+    line-height: 1.5;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-
-  .review-handoff-label span:first-child,
-  .review-handoff-label span:last-child {
-    opacity: 0.55;
+    white-space: nowrap;
   }
 
   .review-handoff-line {
     height: 1px;
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--divider-dark);
+  }
 
-    background: currentColor;
-
-    transform: scaleX(0);
+  [data-review-handoff-line] {
+    display: block;
+    height: 100%;
+    background: var(--lavender);
     transform-origin: left center;
   }
 
-  [data-review-handoff][data-enhanced="true"] {
-    display: block;
-
-    height: 32svh;
-    min-height: 14rem;
-    max-height: 20rem;
-
-    overflow: clip;
+  /* Reserve identical space with and without JavaScript to avoid a late jump. */
+  @media (min-width: 64rem) and (min-height: 45rem) {
+    .review-handoff {
+      height: clamp(14rem, 32svh, 20rem);
+    }
   }
 </style>

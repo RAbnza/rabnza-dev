@@ -25,8 +25,16 @@ technologies:
   - "Supertest"
 
 contribution:
-  role: "Contribution details pending verification"
-  details: []
+  role: "Solo developer"
+  teamContext: "Independently designed and implemented as a solo full-stack project."
+  details:
+    - "Designed and implemented the frontend application and user workflows."
+    - "Designed and implemented the backend API, validation, authentication, and role-based authorization."
+    - "Designed the PostgreSQL data model and Prisma persistence layer."
+    - "Implemented transactional sales and inventory movement logic."
+    - "Implemented reporting, audit history, and inventory traceability features."
+    - "Created the frontend and backend test suites."
+    - "Configured and deployed the frontend, backend, and production database."
 
 gallery: []
 

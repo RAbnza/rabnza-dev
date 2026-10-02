@@ -50,7 +50,7 @@ gallery:
   - src: "../../assets/projects/tindatrack/receipt.png"
     alt: "TindaTrack sale receipt for transaction 5 showing three items, cash payment, and a total of ₱119.50."
     caption: "A recorded sale produces a transaction receipt using the server-confirmed items, prices, and total."
-    role: "supporting"
+    role: "receipt"
 
   - src: "../../assets/projects/tindatrack/movements.png"
     alt: "TindaTrack Stock Movements screen listing sale-driven inventory changes with products, signed quantity changes, timestamps, and linked sale-item sources."
@@ -60,7 +60,7 @@ gallery:
   - src: "../../assets/projects/tindatrack/audit.png"
     alt: "TindaTrack Audit History screen showing sale-created events with actor, entity, timestamp, and expandable evidence."
     caption: "Audit history connects business actions to the actor, affected entity, time, and supporting evidence."
-    role: "supporting"
+    role: "audit"
 
   - src: "../../assets/projects/tindatrack/review.png"
     alt: "TindaTrack Daily Sales report for October 3, 2026 showing one ₱119.50 transaction with its payment method and expanded item details."

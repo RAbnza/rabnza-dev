@@ -1,0 +1,50 @@
+---
+import { Image, type LocalImageProps } from "astro:assets";
+
+interface Props {
+  src: LocalImageProps["src"];
+  alt: string;
+  caption?: string;
+  dark?: boolean;
+  sizes?: string;
+}
+
+const {
+  src,
+  alt,
+  caption,
+  dark = false,
+  sizes = "(max-width: 1023px) calc(100vw - 40px), 58vw",
+} = Astro.props;
+---
+
+<figure>
+  <div
+    class:list={[
+      "overflow-hidden rounded-lg border",
+      dark
+        ? "border-divider-dark bg-dark-surface"
+        : "border-border bg-card shadow-card",
+    ]}
+  >
+    <Image
+      src={src}
+      alt={alt}
+      widths={[480, 640, 960, 1280, 1600]}
+      sizes={sizes}
+    />
+  </div>
+
+  {
+    caption && (
+      <figcaption
+        class:list={[
+          "mt-3 text-sm leading-relaxed",
+          dark ? "text-muted-dark" : "text-muted-foreground",
+        ]}
+      >
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

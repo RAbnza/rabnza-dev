@@ -63,8 +63,16 @@ const projects = defineCollection({
             src: image(),
             alt: z.string(),
             caption: z.string().optional(),
+
             role: z
-              .enum(["sell", "track", "review", "supporting"])
+              .enum([
+                "sell",
+                "receipt",
+                "track",
+                "audit",
+                "review",
+                "supporting",
+              ])
               .default("supporting"),
           }),
         )

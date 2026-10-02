@@ -1,0 +1,201 @@
+<section class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
+  <div class="container-main">
+    <div class="max-w-3xl">
+      <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+        Engineering
+      </p>
+
+      <h2 class="mt-3 text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
+        Correctness is part of the product.
+      </h2>
+
+      <p class="mt-6 text-lg leading-relaxed text-muted-foreground">
+        The core workflows are designed around a small set of invariants:
+        inventory changes need evidence, sales must commit as a complete unit,
+        and values such as price and authorization cannot be trusted simply
+        because the client supplied them.
+      </p>
+    </div>
+
+    <div class="mt-16 grid gap-px overflow-hidden rounded-lg border border-border bg-border lg:grid-cols-2">
+      <article class="bg-background p-6 md:p-8">
+        <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+          01 — Inventory ledger
+        </p>
+
+        <h3 class="mt-4 text-2xl font-semibold tracking-[-0.02em]">
+          Stock is derived from movements.
+        </h3>
+
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Products do not carry an independently editable stock field. Receipts,
+          sales, and adjustments create signed StockMovement records, and
+          current inventory is derived from those movements.
+        </p>
+
+        <div
+          class="mt-6 rounded-md border border-border bg-soft-silver p-4 font-mono text-sm leading-7"
+          aria-label="Inventory calculation"
+        >
+          <div>receipt → positive movement</div>
+          <div>sale → negative movement</div>
+          <div>adjustment → signed movement</div>
+          <div class="mt-3 border-t border-divider-light pt-3">
+            current stock = Σ quantity delta
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-background p-6 md:p-8">
+        <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+          02 — Transaction boundary
+        </p>
+
+        <h3 class="mt-4 text-2xl font-semibold tracking-[-0.02em]">
+          A sale succeeds as one operation.
+        </h3>
+
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          TindaTrack creates the sale, line items, corresponding inventory
+          movements, and audit evidence inside the same database transaction. If
+          required validation fails, the operation does not leave partial sale
+          state behind.
+        </p>
+
+        <ol class="mt-6 space-y-3 text-sm">
+          <li class="border-l border-violet-ink pl-4">
+            Load authoritative product data
+          </li>
+          <li class="border-l border-violet-ink pl-4">
+            Validate availability and calculate totals
+          </li>
+          <li class="border-l border-violet-ink pl-4">
+            Create sale and sale items
+          </li>
+          <li class="border-l border-violet-ink pl-4">
+            Create stock movements
+          </li>
+          <li class="border-l border-violet-ink pl-4">Write audit evidence</li>
+        </ol>
+      </article>
+
+      <article class="bg-background p-6 md:p-8">
+        <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+          03 — Server authority
+        </p>
+
+        <h3 class="mt-4 text-2xl font-semibold tracking-[-0.02em]">
+          The client does not decide the price.
+        </h3>
+
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Sale requests contain product identifiers, quantities, and a payment
+          method. The backend reloads the current products, reads their selling
+          prices, calculates each line total, and derives the final sale total.
+        </p>
+
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-md border border-border p-4">
+            <p class="text-sm font-medium">Client sends</p>
+            <p class="mt-2 font-mono text-sm text-muted-foreground">
+              productId
+              <br />
+              quantity
+              <br />
+              paymentMethod
+            </p>
+          </div>
+
+          <div class="rounded-md border border-border p-4">
+            <p class="text-sm font-medium">Server decides</p>
+            <p class="mt-2 font-mono text-sm text-muted-foreground">
+              unitPrice
+              <br />
+              lineTotal
+              <br />
+              totalAmount
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="bg-background p-6 md:p-8">
+        <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+          04 — Authorization
+        </p>
+
+        <h3 class="mt-4 text-2xl font-semibold tracking-[-0.02em]">
+          The API remains the security boundary.
+        </h3>
+
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          Authentication uses bearer JWTs, but a valid token is not treated as
+          permanent proof that the account should still have access. Protected
+          requests re-read the user and reject accounts that no longer exist or
+          have become inactive.
+        </p>
+
+        <p class="mt-4 leading-relaxed text-muted-foreground">
+          OWNER and STAFF permissions are enforced by backend authorization,
+          while frontend route restrictions primarily improve the interface
+          experience.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="dark bg-night-canvas px-5 py-20 text-light-text md:px-8 md:py-24 lg:px-12 lg:py-32">
+  <div class="container-main">
+    <div class="grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-4">
+        <p class="font-mono text-xs tracking-[0.08em] text-lavender uppercase">
+          Integrity under contention
+        </p>
+
+        <h2 class="mt-3 text-4xl font-semibold tracking-[-0.03em]">
+          Two requests cannot sell the same final unit.
+        </h2>
+      </div>
+
+      <div class="lg:col-span-7 lg:col-start-6">
+        <p class="text-lg leading-relaxed text-muted-dark">
+          Sale processing uses Serializable transaction isolation and retries
+          retryable transaction conflicts. The repository also contains a
+          concurrency verification that starts two sales against a product with
+          exactly one unit remaining.
+        </p>
+
+        <div class="mt-8 grid gap-px overflow-hidden rounded-lg border border-divider-dark bg-divider-dark sm:grid-cols-3">
+          <div class="bg-dark-surface p-5">
+            <p class="font-mono text-xs text-lavender uppercase">
+              Starting stock
+            </p>
+            <p class="mt-3 text-3xl font-semibold">1</p>
+          </div>
+
+          <div class="bg-dark-surface p-5">
+            <p class="font-mono text-xs text-lavender uppercase">
+              Concurrent sales
+            </p>
+            <p class="mt-3 text-3xl font-semibold">2</p>
+          </div>
+
+          <div class="bg-dark-surface p-5">
+            <p class="font-mono text-xs text-lavender uppercase">
+              Successful sales
+            </p>
+            <p class="mt-3 text-3xl font-semibold">1</p>
+          </div>
+        </div>
+
+        <p class="mt-6 leading-relaxed text-muted-dark">
+          The expected invariant is one successful sale, one rejected sale, one
+          sale item, one matching SALE movement, and final stock of zero. The
+          losing request ultimately resolves to insufficient-stock validation
+          rather than allowing inventory to become negative.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -2,6 +2,7 @@
 import { getEntry, render } from "astro:content";
 
 import CaseStudyChapter from "@/components/sections/CaseStudyChapter.astro";
+import TindaTrackEngineering from "@/components/sections/TindaTrackEngineering.astro";
 import ProjectMedia from "@/components/ui/ProjectMedia.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -185,6 +186,8 @@ const reviewMedia = gallery.find((item) => item.role === "review");
           </div>
         </CaseStudyChapter>
       )}
+
+      <TindaTrackEngineering />
 
       <section class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
         <div class="container-main grid gap-12 lg:grid-cols-12">

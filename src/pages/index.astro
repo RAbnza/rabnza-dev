@@ -5,7 +5,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 <BaseLayout>
   <main id="main-content">
     <section class="min-h-screen px-5 py-16 md:px-8 md:py-24 lg:px-12 lg:py-32">
-      <div id="motion-test" class="container-main">
+      <div class="container-main">
         <p class="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
           Portfolio foundation
         </p>
@@ -21,27 +21,4 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       </div>
     </section>
   </main>
-
-  <script>
-    import { createMotionScope } from "@/lib/motion/scope";
-    import { revealElement } from "@/lib/motion/reveal";
-
-    const root = document.querySelector<HTMLElement>("#motion-test");
-
-    if (root) {
-      const scope = createMotionScope(root, () => {
-        revealElement(root);
-      });
-
-      document.addEventListener(
-        "astro:before-swap",
-        () => {
-          scope.revert();
-        },
-        {
-          once: true,
-        },
-      );
-    }
-  </script>
 </BaseLayout>

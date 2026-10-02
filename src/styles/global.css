@@ -234,12 +234,6 @@
     background: var(--lavender);
     color: var(--charcoal);
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    :focus-within {
-      scroll-behavior: smooth;
-    }
-  }
 }
 
 @layer components {

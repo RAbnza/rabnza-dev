@@ -4,17 +4,13 @@ import { canUseExtendedMotion } from "./eligibility";
 import { createMotionScope } from "./scope";
 
 export function setupTindaTrackSequence(root: HTMLElement) {
-  const sellCopy = root.querySelector<HTMLElement>(
-    "[data-sequence-sell-copy]",
-  );
+  const sellCopy = root.querySelector<HTMLElement>("[data-sequence-sell-copy]");
 
   const sellMedia = root.querySelector<HTMLElement>(
     "[data-sequence-sell-media]",
   );
 
-  const receipt = root.querySelector<HTMLElement>(
-    "[data-sequence-receipt]",
-  );
+  const receipt = root.querySelector<HTMLElement>("[data-sequence-receipt]");
 
   const trackCopy = root.querySelector<HTMLElement>(
     "[data-sequence-track-copy]",
@@ -147,10 +143,7 @@ export function setupTindaTrackSequence(root: HTMLElement) {
         trackMedia,
         darkEnvironment,
         lavenderBridge,
-      ].filter(
-        (element): element is HTMLElement =>
-          Boolean(element),
-      );
+      ].filter((element): element is HTMLElement => Boolean(element));
 
       elements.forEach((element) => {
         element.style.removeProperty("opacity");
@@ -173,34 +166,20 @@ export function setupTindaTrackSequence(root: HTMLElement) {
 
       const rect = root.getBoundingClientRect();
 
-      const scrollDistance =
-        root.offsetHeight - window.innerHeight;
+      const scrollDistance = root.offsetHeight - window.innerHeight;
 
       if (scrollDistance <= 0) {
         return;
       }
 
-      const progress = Math.min(
-        Math.max(
-          -rect.top / scrollDistance,
-          0,
-        ),
-        1,
-      );
+      const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
 
-      timeline.seek(
-        timeline.duration * progress,
-        true,
-      );
+      timeline.seek(timeline.duration * progress, true);
 
-      root.dataset.phase =
-        progress < 0.55
-          ? "sell"
-          : "track";
+      root.dataset.phase = progress < 0.55 ? "sell" : "track";
 
       if (progressFill) {
-        progressFill.style.transform =
-          `scaleX(${progress})`;
+        progressFill.style.transform = `scaleX(${progress})`;
       }
     };
 
@@ -209,8 +188,7 @@ export function setupTindaTrackSequence(root: HTMLElement) {
         return;
       }
 
-      frameId =
-        window.requestAnimationFrame(update);
+      frameId = window.requestAnimationFrame(update);
     };
 
     const enable = () => {
@@ -252,33 +230,20 @@ export function setupTindaTrackSequence(root: HTMLElement) {
 
     syncEligibility();
 
-    window.addEventListener(
-      "scroll",
-      scheduleUpdate,
-      {
-        passive: true,
-      },
-    );
+    window.addEventListener("scroll", scheduleUpdate, {
+      passive: true,
+    });
 
-    window.addEventListener(
-      "resize",
-      handleResize,
-    );
+    window.addEventListener("resize", handleResize);
 
     return () => {
       if (frameId !== 0) {
         window.cancelAnimationFrame(frameId);
       }
 
-      window.removeEventListener(
-        "scroll",
-        scheduleUpdate,
-      );
+      window.removeEventListener("scroll", scheduleUpdate);
 
-      window.removeEventListener(
-        "resize",
-        handleResize,
-      );
+      window.removeEventListener("resize", handleResize);
 
       delete root.dataset.enhanced;
 

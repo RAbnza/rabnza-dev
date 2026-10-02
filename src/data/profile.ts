@@ -6,4 +6,4 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/rendel-abainza/",
   graduationYear: "2026",
   phoneNumber: "+63 966 405 7897",
-} as const; 
+} as const;

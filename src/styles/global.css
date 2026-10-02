@@ -8,20 +8,11 @@
 @theme inline {
   /* Fonts */
   --font-sans:
-    "Geist Variable",
-    "Geist",
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+    "Geist Variable", "Geist", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
 
   --font-mono:
-    ui-monospace,
-    SFMono-Regular,
-    Consolas,
-    "Liberation Mono",
-    monospace;
+    ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
 
   /* Semantic colors */
   --color-background: var(--background);
@@ -142,8 +133,7 @@
   --shadow-card: 0 12px 32px rgb(0 0 0 / 0.08);
 
   /* Glow */
-  --glow-lavender:
-    0 0 32px rgb(200 182 242 / 0.12);
+  --glow-lavender: 0 0 32px rgb(200 182 242 / 0.12);
 
   /* Layout */
   --container-main: 75rem;
@@ -248,18 +238,12 @@
 
 @layer components {
   .container-main {
-    width: min(
-      calc(100% - 2.5rem),
-      var(--container-main)
-    );
+    width: min(calc(100% - 2.5rem), var(--container-main));
     margin-inline: auto;
   }
 
   .container-wide {
-    width: min(
-      calc(100% - 2.5rem),
-      var(--container-wide)
-    );
+    width: min(calc(100% - 2.5rem), var(--container-wide));
     margin-inline: auto;
   }
 
@@ -270,33 +254,21 @@
   @media (min-width: 48rem) {
     .container-main,
     .container-wide {
-      width: min(
-        calc(100% - 4rem),
-        var(--container-main)
-      );
+      width: min(calc(100% - 4rem), var(--container-main));
     }
 
     .container-wide {
-      width: min(
-        calc(100% - 4rem),
-        var(--container-wide)
-      );
+      width: min(calc(100% - 4rem), var(--container-wide));
     }
   }
 
   @media (min-width: 64rem) {
     .container-main {
-      width: min(
-        calc(100% - 6rem),
-        var(--container-main)
-      );
+      width: min(calc(100% - 6rem), var(--container-main));
     }
 
     .container-wide {
-      width: min(
-        calc(100% - 6rem),
-        var(--container-wide)
-      );
+      width: min(calc(100% - 6rem), var(--container-wide));
     }
   }
 }

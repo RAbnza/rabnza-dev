@@ -3,6 +3,7 @@ import { getEntry, render } from "astro:content";
 
 import CaseStudyChapter from "@/components/sections/CaseStudyChapter.astro";
 import TindaTrackEngineering from "@/components/sections/TindaTrackEngineering.astro";
+import TindaTrackFlagshipSequence from "@/components/sections/TindaTrackFlagshipSequence.astro";
 import ProjectMedia from "@/components/ui/ProjectMedia.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -122,47 +123,28 @@ const reviewMedia = gallery.find((item) => item.role === "review");
         </div>
       </section>
 
-      {sellMedia && (
-        <CaseStudyChapter
-          eyebrow="01 — Sell"
-          motionId="sell"
-          title="Record the sale without trusting the client."
-          description="The user builds the order in the interface, but the backend reloads authoritative product data, verifies inventory, and calculates the final prices and total before committing the transaction."
-        >
-          <div class="space-y-8">
-            <ProjectMedia
-              src={sellMedia.src}
-              alt={sellMedia.alt}
-              caption={sellMedia.caption}
-            />
-
-            {receiptMedia && (
-              <ProjectMedia
-                src={receiptMedia.src}
-                alt={receiptMedia.alt}
-                caption={receiptMedia.caption}
-                sizes="(max-width: 1023px) calc(100vw - 40px), 42vw"
-              />
-            )}
-          </div>
-        </CaseStudyChapter>
-      )}
-
-      {trackMedia && (
-        <CaseStudyChapter
-          eyebrow="02 — Track"
-          motionId="track"
-          title="Treat inventory as evidence, not a mutable number."
-          description="Inventory is derived from signed stock movements. Receipts, sales, and adjustments leave records explaining why each quantity changed."
-          dark
-        >
-          <ProjectMedia
-            src={trackMedia.src}
-            alt={trackMedia.alt}
-            caption={trackMedia.caption}
-            dark
-          />
-        </CaseStudyChapter>
+      {sellMedia && trackMedia && (
+        <TindaTrackFlagshipSequence
+          sell={{
+            src: sellMedia.src,
+            alt: sellMedia.alt,
+            caption: sellMedia.caption,
+          }}
+          receipt={
+            receiptMedia
+              ? {
+                  src: receiptMedia.src,
+                  alt: receiptMedia.alt,
+                  caption: receiptMedia.caption,
+                }
+              : undefined
+          }
+          track={{
+            src: trackMedia.src,
+            alt: trackMedia.alt,
+            caption: trackMedia.caption,
+          }}
+        />
       )}
 
       {reviewMedia && (
@@ -219,8 +201,9 @@ const reviewMedia = gallery.find((item) => item.role === "review");
 
 <script>
   import { setupCaseStudyMotion } from "@/lib/motion/case-study";
+  import { setupTindaTrackSequence } from "@/lib/motion/tindatrack-sequence";
 
-  function initializeCaseStudyMotion() {
+  function initializeTindaTrackMotion() {
     const root = document.querySelector<HTMLElement>(
       "[data-tindatrack-case-study]",
     );
@@ -229,20 +212,40 @@ const reviewMedia = gallery.find((item) => item.role === "review");
       return;
     }
 
-    const scope = setupCaseStudyMotion(root);
+    const scopes: Array<{ revert: () => void }> = [];
 
-    if (!scope) {
+    const caseStudyScope = setupCaseStudyMotion(root);
+
+    if (caseStudyScope) {
+      scopes.push(caseStudyScope);
+    }
+
+    const sequenceRoot = root.querySelector<HTMLElement>(
+      "[data-tindatrack-sequence]",
+    );
+
+    if (sequenceRoot) {
+      const sequenceScope = setupTindaTrackSequence(sequenceRoot);
+
+      if (sequenceScope) {
+        scopes.push(sequenceScope);
+      }
+    }
+
+    if (scopes.length === 0) {
       return;
     }
 
     document.addEventListener(
       "astro:before-swap",
       () => {
-        scope.revert();
+        scopes.forEach((scope) => {
+          scope.revert();
+        });
       },
       { once: true },
     );
   }
 
-  initializeCaseStudyMotion();
+  initializeTindaTrackMotion();
 </script>

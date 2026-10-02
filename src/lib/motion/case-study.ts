@@ -34,33 +34,50 @@ export function setupCaseStudyMotion(root: HTMLElement) {
         return;
       }
 
+      const copyOffset = extended ? 20 : 12;
+      const mediaOffset = extended ? 28 : 12;
+
+      copy.style.opacity = "0";
+      copy.style.transform = `translateY(${copyOffset}px)`;
+
+      media.style.opacity = "0";
+      media.style.transform = `translateY(${mediaOffset}px)`;
+
       let hasAnimated = false;
+
+      const revealChapter = () => {
+        if (hasAnimated) {
+          return;
+        }
+
+        hasAnimated = true;
+
+        animate(copy, {
+          opacity: 1,
+          translateY: 0,
+          duration: motionDurations.chapter,
+          ease: motionEasings.entrance,
+        });
+
+        animate(media, {
+          opacity: 1,
+          translateY: 0,
+          duration: motionDurations.chapter,
+          delay: extended ? 80 : 40,
+          ease: motionEasings.entrance,
+        });
+      };
 
       const observer = new IntersectionObserver(
         (entries) => {
           const entry = entries[0];
 
-          if (!entry || !entry.isIntersecting || hasAnimated) {
+          if (!entry?.isIntersecting) {
             return;
           }
 
-          hasAnimated = true;
           observer.disconnect();
-
-          animate(copy, {
-            opacity: [0, 1],
-            translateY: [extended ? 20 : 12, 0],
-            duration: motionDurations.chapter,
-            ease: motionEasings.entrance,
-          });
-
-          animate(media, {
-            opacity: [0, 1],
-            translateY: [extended ? 28 : 12, 0],
-            duration: motionDurations.chapter,
-            delay: extended ? 80 : 40,
-            ease: motionEasings.entrance,
-          });
+          revealChapter();
         },
         {
           threshold: 0.18,

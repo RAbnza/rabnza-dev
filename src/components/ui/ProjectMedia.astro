@@ -35,16 +35,14 @@ const {
     />
   </div>
 
-  {
-    caption && (
-      <figcaption
-        class:list={[
-          "mt-3 text-sm leading-relaxed",
-          dark ? "text-muted-dark" : "text-muted-foreground",
-        ]}
-      >
-        {caption}
-      </figcaption>
-    )
-  }
+  {caption && (
+    <figcaption
+      class:list={[
+        "mt-3 text-sm leading-relaxed",
+        dark ? "text-muted-dark" : "text-muted-foreground",
+      ]}
+    >
+      {caption}
+    </figcaption>
+  )}
 </figure>

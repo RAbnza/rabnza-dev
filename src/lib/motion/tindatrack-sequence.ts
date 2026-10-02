@@ -4,10 +4,6 @@ import { canUseExtendedMotion } from "./eligibility";
 import { createMotionScope } from "./scope";
 
 export function setupTindaTrackSequence(root: HTMLElement) {
-  if (!canUseExtendedMotion()) {
-    return null;
-  }
-
   const sellCopy = root.querySelector<HTMLElement>("[data-sequence-sell-copy]");
 
   const sellMedia = root.querySelector<HTMLElement>(
@@ -49,6 +45,7 @@ export function setupTindaTrackSequence(root: HTMLElement) {
 
   const scope = createMotionScope(root, () => {
     let frameId = 0;
+    let enhanced = false;
 
     const timeline = createTimeline({
       autoplay: false,
@@ -137,12 +134,33 @@ export function setupTindaTrackSequence(root: HTMLElement) {
       );
     }
 
-    timeline.seek(0, true);
+    const clearAnimatedStyles = () => {
+      const elements = [
+        sellCopy,
+        sellMedia,
+        receipt,
+        trackCopy,
+        trackMedia,
+        darkEnvironment,
+        lavenderBridge,
+      ].filter((element): element is HTMLElement => Boolean(element));
 
-    root.dataset.enhanced = "true";
+      elements.forEach((element) => {
+        element.style.removeProperty("opacity");
+        element.style.removeProperty("transform");
+      });
+
+      if (progressFill) {
+        progressFill.style.removeProperty("transform");
+      }
+    };
 
     const update = () => {
       frameId = 0;
+
+      if (!enhanced) {
+        return;
+      }
 
       const rect = root.getBoundingClientRect();
 
@@ -169,13 +187,50 @@ export function setupTindaTrackSequence(root: HTMLElement) {
       frameId = window.requestAnimationFrame(update);
     };
 
-    update();
+    const enable = () => {
+      if (enhanced) {
+        return;
+      }
+
+      enhanced = true;
+
+      root.dataset.enhanced = "true";
+
+      update();
+    };
+
+    const disable = () => {
+      if (!enhanced) {
+        return;
+      }
+
+      enhanced = false;
+
+      delete root.dataset.enhanced;
+
+      clearAnimatedStyles();
+    };
+
+    const syncEligibility = () => {
+      if (canUseExtendedMotion()) {
+        enable();
+      } else {
+        disable();
+      }
+    };
+
+    const handleResize = () => {
+      syncEligibility();
+      scheduleUpdate();
+    };
+
+    syncEligibility();
 
     window.addEventListener("scroll", scheduleUpdate, {
       passive: true,
     });
 
-    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       if (frameId !== 0) {
@@ -183,13 +238,12 @@ export function setupTindaTrackSequence(root: HTMLElement) {
       }
 
       window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
+
+      window.removeEventListener("resize", handleResize);
 
       delete root.dataset.enhanced;
 
-      if (progressFill) {
-        progressFill.style.removeProperty("transform");
-      }
+      clearAnimatedStyles();
     };
   });
 

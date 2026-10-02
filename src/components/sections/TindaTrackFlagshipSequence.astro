@@ -18,8 +18,14 @@ interface Props {
 const { sell, receipt, track } = Astro.props;
 ---
 
-<section class="flagship-sequence" data-tindatrack-sequence>
-  <div class="flagship-stage" data-sequence-stage>
+<section
+  class="flagship-sequence"
+  data-tindatrack-sequence
+>
+  <div
+    class="flagship-stage"
+    data-sequence-stage
+  >
     <div
       class="flagship-dark-environment"
       data-sequence-dark
@@ -40,8 +46,13 @@ const { sell, receipt, track } = Astro.props;
         class="container-wide grid gap-10 lg:grid-cols-12 lg:items-center"
         data-sequence-layout
       >
-        <div class="lg:col-span-4" data-sequence-sell-copy>
-          <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+        <div
+          class="lg:col-span-4"
+          data-sequence-sell-copy
+        >
+          <p
+            class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase"
+          >
             01 — Sell
           </p>
 
@@ -60,18 +71,27 @@ const { sell, receipt, track } = Astro.props;
           class="relative lg:col-span-7 lg:col-start-6"
           data-sequence-sell-media
         >
-          <ProjectMedia src={sell.src} alt={sell.alt} caption={sell.caption} />
+          <ProjectMedia
+            src={sell.src}
+            alt={sell.alt}
+            caption={sell.caption}
+          />
 
-          {receipt && (
-            <div class="flagship-receipt mt-8" data-sequence-receipt>
-              <ProjectMedia
-                src={receipt.src}
-                alt={receipt.alt}
-                caption={receipt.caption}
-                sizes="(max-width: 1023px) calc(100vw - 40px), 24vw"
-              />
-            </div>
-          )}
+          {
+            receipt && (
+              <div
+                class="flagship-receipt mt-8"
+                data-sequence-receipt
+              >
+                <ProjectMedia
+                  src={receipt.src}
+                  alt={receipt.alt}
+                  caption={receipt.caption}
+                  sizes="(max-width: 1023px) calc(100vw - 40px), 20vw"
+                />
+              </div>
+            )
+          }
         </div>
       </div>
     </section>
@@ -84,8 +104,13 @@ const { sell, receipt, track } = Astro.props;
         class="container-wide grid gap-10 lg:grid-cols-12 lg:items-center"
         data-sequence-layout
       >
-        <div class="lg:col-span-4" data-sequence-track-copy>
-          <p class="font-mono text-xs tracking-[0.08em] text-lavender uppercase">
+        <div
+          class="lg:col-span-4"
+          data-sequence-track-copy
+        >
+          <p
+            class="font-mono text-xs tracking-[0.08em] text-lavender uppercase"
+          >
             02 — Track
           </p>
 
@@ -99,7 +124,10 @@ const { sell, receipt, track } = Astro.props;
           </p>
         </div>
 
-        <div class="lg:col-span-7 lg:col-start-6" data-sequence-track-media>
+        <div
+          class="lg:col-span-7 lg:col-start-6"
+          data-sequence-track-media
+        >
           <ProjectMedia
             src={track.src}
             alt={track.alt}
@@ -110,14 +138,25 @@ const { sell, receipt, track } = Astro.props;
       </div>
     </section>
 
-    <div class="flagship-progress" data-sequence-progress aria-hidden="true">
-      <span>Sell</span>
+    <div
+      class="flagship-progress"
+      data-sequence-progress
+      aria-hidden="true"
+    >
+      <span data-sequence-progress-sell>
+        Sell
+      </span>
 
       <div class="flagship-progress-track">
-        <span class="flagship-progress-fill" data-sequence-progress-fill></span>
+        <span
+          class="flagship-progress-fill"
+          data-sequence-progress-fill
+        ></span>
       </div>
 
-      <span>Track</span>
+      <span data-sequence-progress-track>
+        Track
+      </span>
     </div>
   </div>
 </section>
@@ -169,7 +208,15 @@ const { sell, receipt, track } = Astro.props;
     background: transparent;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-dark-environment {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-track-copy],
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-track-media] {
+    opacity: 0;
+  }
+
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-dark-environment {
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -178,23 +225,26 @@ const { sell, receipt, track } = Astro.props;
     opacity: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-lavender-bridge {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-lavender-bridge {
     position: absolute;
     inset: 0;
-    z-index: 1;
+    z-index: 3;
     display: block;
     background: var(--lavender);
-    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
     pointer-events: none;
   }
 
   [data-tindatrack-sequence][data-enhanced="true"] .flagship-receipt {
     position: absolute;
-    right: -3%;
-    bottom: -12%;
-    width: min(38%, 18rem);
-    margin-top: 0;
+    right: 2%;
+    bottom: -8%;
     z-index: 3;
+    width: min(30%, 15rem);
+    margin-top: 0;
+    transform-origin: center;
   }
 
   [data-tindatrack-sequence][data-enhanced="true"]
@@ -208,32 +258,67 @@ const { sell, receipt, track } = Astro.props;
     left: 50%;
     bottom: 1.5rem;
     z-index: 4;
+
     display: flex;
-    width: min(22rem, calc(100% - 3rem));
-    transform: translateX(-50%);
     align-items: center;
     gap: 0.75rem;
-    font-family: monospace;
+
+    width: min(22rem, calc(100% - 3rem));
+
+    transform: translateX(-50%);
+
+    color: var(--charcoal);
+
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+
     pointer-events: none;
+
+    transition:
+      color var(--duration-fast) var(--ease-state);
+  }
+
+  [data-tindatrack-sequence][data-enhanced="true"][data-phase="track"]
+    .flagship-progress {
+    color: var(--light-text);
+  }
+
+  [data-sequence-progress-sell],
+  [data-sequence-progress-track] {
+    opacity: 0.45;
+
+    transition:
+      opacity var(--duration-fast) var(--ease-state);
+  }
+
+  [data-tindatrack-sequence][data-enhanced="true"][data-phase="sell"]
+    [data-sequence-progress-sell],
+  [data-tindatrack-sequence][data-enhanced="true"][data-phase="track"]
+    [data-sequence-progress-track] {
+    opacity: 1;
   }
 
   .flagship-progress-track {
     height: 1px;
     flex: 1;
     overflow: hidden;
+
     background: currentColor;
+
     opacity: 0.3;
   }
 
   .flagship-progress-fill {
     display: block;
+
     width: 100%;
     height: 100%;
+
     transform: scaleX(0);
     transform-origin: left center;
+
     background: currentColor;
   }
 </style>

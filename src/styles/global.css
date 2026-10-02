@@ -246,6 +246,61 @@
   }
 }
 
+@layer components {
+  .container-main {
+    width: min(
+      calc(100% - 2.5rem),
+      var(--container-main)
+    );
+    margin-inline: auto;
+  }
+
+  .container-wide {
+    width: min(
+      calc(100% - 2.5rem),
+      var(--container-wide)
+    );
+    margin-inline: auto;
+  }
+
+  .reading-width {
+    max-width: var(--container-reading);
+  }
+
+  @media (min-width: 48rem) {
+    .container-main,
+    .container-wide {
+      width: min(
+        calc(100% - 4rem),
+        var(--container-main)
+      );
+    }
+
+    .container-wide {
+      width: min(
+        calc(100% - 4rem),
+        var(--container-wide)
+      );
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .container-main {
+      width: min(
+        calc(100% - 6rem),
+        var(--container-main)
+      );
+    }
+
+    .container-wide {
+      width: min(
+        calc(100% - 6rem),
+        var(--container-wide)
+      );
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

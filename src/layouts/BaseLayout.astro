@@ -1,0 +1,39 @@
+---
+import "@/styles/global.css";
+import { siteConfig } from "@/data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <meta name="description" content={description} />
+
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+  </head>
+
+  <body>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-5 focus:top-5 focus:z-50 focus:rounded-sm focus:bg-background focus:px-4 focus:py-3 focus:text-foreground focus:shadow-sm"
+    >
+      Skip to main content
+    </a>
+
+    <slot />
+  </body>
+</html>

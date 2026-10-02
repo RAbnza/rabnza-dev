@@ -1,17 +1,26 @@
 ---
-
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <main id="main-content">
+    <section class="min-h-screen px-5 py-16 md:px-8 md:py-24 lg:px-12 lg:py-32">
+      <div class="container-main">
+        <p class="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
+          Portfolio foundation
+        </p>
+
+        <h1
+          class="mt-4 max-w-4xl text-4xl font-semibold tracking-[-0.04em] text-balance sm:text-5xl lg:text-6xl"
+        >
+          Useful software, thoughtfully built.
+        </h1>
+
+        <p class="mt-6 max-w-[68ch] text-lg leading-relaxed text-muted-foreground">
+          The project foundation is ready. Portfolio content and major interactions
+          will be implemented in later development phases.
+        </p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

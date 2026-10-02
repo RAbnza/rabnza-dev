@@ -1,1 +1,13 @@
+@import "@fontsource-variable/geist";
 @import "tailwindcss";
+
+html {
+  font-family:
+    "Geist Variable",
+    "Geist",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}

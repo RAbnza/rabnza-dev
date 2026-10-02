@@ -4,9 +4,10 @@ interface Props {
   title: string;
   description: string;
   dark?: boolean;
+  motionId?: string;
 }
 
-const { eyebrow, title, description, dark = false } = Astro.props;
+const { eyebrow, title, description, dark = false, motionId } = Astro.props;
 ---
 
 <section
@@ -14,10 +15,11 @@ const { eyebrow, title, description, dark = false } = Astro.props;
     "px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32",
     dark && "dark bg-night-canvas text-light-text",
   ]}
+  data-case-study-chapter={motionId}
 >
   <div class="container-wide">
     <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
-      <div class="lg:col-span-4">
+      <div class="lg:col-span-4" data-chapter-copy>
         <p
           class:list={[
             "font-mono text-xs tracking-[0.08em] uppercase",
@@ -39,7 +41,7 @@ const { eyebrow, title, description, dark = false } = Astro.props;
         </p>
       </div>
 
-      <div class="lg:col-span-7 lg:col-start-6">
+      <div class="lg:col-span-7 lg:col-start-6" data-chapter-media>
         <slot />
       </div>
     </div>

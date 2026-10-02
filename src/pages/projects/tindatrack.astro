@@ -26,7 +26,7 @@ const reviewMedia = gallery.find((item) => item.role === "review");
 
 <BaseLayout title={`${title} — Rendel Abainza`} description={summary}>
   <main id="main-content">
-    <article>
+    <article data-tindatrack-case-study>
       <header class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
         <div class="container-main">
           <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
@@ -125,6 +125,7 @@ const reviewMedia = gallery.find((item) => item.role === "review");
       {sellMedia && (
         <CaseStudyChapter
           eyebrow="01 — Sell"
+          motionId="sell"
           title="Record the sale without trusting the client."
           description="The user builds the order in the interface, but the backend reloads authoritative product data, verifies inventory, and calculates the final prices and total before committing the transaction."
         >
@@ -150,6 +151,7 @@ const reviewMedia = gallery.find((item) => item.role === "review");
       {trackMedia && (
         <CaseStudyChapter
           eyebrow="02 — Track"
+          motionId="track"
           title="Treat inventory as evidence, not a mutable number."
           description="Inventory is derived from signed stock movements. Receipts, sales, and adjustments leave records explaining why each quantity changed."
           dark
@@ -166,6 +168,7 @@ const reviewMedia = gallery.find((item) => item.role === "review");
       {reviewMedia && (
         <CaseStudyChapter
           eyebrow="03 — Review"
+          motionId="review"
           title="Bring operational history back into view."
           description="Daily sales reporting, stock movements, and audit history provide evidence that can be reviewed after the original transaction has completed."
         >
@@ -213,3 +216,33 @@ const reviewMedia = gallery.find((item) => item.role === "review");
     </article>
   </main>
 </BaseLayout>
+
+<script>
+  import { setupCaseStudyMotion } from "@/lib/motion/case-study";
+
+  function initializeCaseStudyMotion() {
+    const root = document.querySelector<HTMLElement>(
+      "[data-tindatrack-case-study]",
+    );
+
+    if (!root) {
+      return;
+    }
+
+    const scope = setupCaseStudyMotion(root);
+
+    if (!scope) {
+      return;
+    }
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        scope.revert();
+      },
+      { once: true },
+    );
+  }
+
+  initializeCaseStudyMotion();
+</script>

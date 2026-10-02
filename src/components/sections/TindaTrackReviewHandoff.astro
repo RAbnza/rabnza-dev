@@ -1,14 +1,30 @@
-<section class="review-handoff" data-review-handoff aria-hidden="true">
-  <div class="review-handoff-dark" data-review-handoff-dark></div>
+<section
+  class="review-handoff"
+  data-review-handoff
+  aria-hidden="true"
+>
+  <div
+    class="review-handoff-dark"
+    data-review-handoff-dark
+  ></div>
 
-  <div class="review-handoff-lavender" data-review-handoff-lavender></div>
+  <div
+    class="review-handoff-lavender"
+    data-review-handoff-lavender
+  ></div>
 
-  <div class="review-handoff-light" data-review-handoff-light></div>
+  <div
+    class="review-handoff-light"
+    data-review-handoff-light
+  ></div>
 
   <div class="review-handoff-label">
     <span>Track</span>
 
-    <span class="review-handoff-line" data-review-handoff-line></span>
+    <span
+      class="review-handoff-line"
+      data-review-handoff-line
+    ></span>
 
     <span>Review</span>
   </div>
@@ -34,29 +50,37 @@
 
   .review-handoff-lavender {
     z-index: 1;
+
     background: var(--lavender);
+
     transform: scaleY(0);
     transform-origin: top center;
   }
 
   .review-handoff-light {
     z-index: 2;
+
     background: var(--silver-canvas);
+
     transform: translateY(100%);
   }
 
   .review-handoff-label {
     position: absolute;
     left: 50%;
-    bottom: 2rem;
+    top: 50%;
+    bottom: auto;
     z-index: 3;
 
     display: flex;
-    width: min(22rem, calc(100% - 3rem));
+    width: min(
+      22rem,
+      calc(100% - 3rem)
+    );
     align-items: center;
     gap: 0.75rem;
 
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
 
     color: var(--light-text);
 
@@ -83,12 +107,11 @@
 
   [data-review-handoff][data-enhanced="true"] {
     display: block;
-    height: 70svh;
-    overflow: clip;
-  }
 
-  [data-review-handoff][data-enhanced="true"] .review-handoff-label {
-    position: sticky;
-    top: calc(100svh - 4rem);
+    height: 32svh;
+    min-height: 14rem;
+    max-height: 20rem;
+
+    overflow: clip;
   }
 </style>

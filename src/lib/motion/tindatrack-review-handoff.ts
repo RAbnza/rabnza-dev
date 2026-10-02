@@ -3,18 +3,18 @@ import { createTimeline } from "animejs";
 import { canUseExtendedMotion } from "./eligibility";
 import { createMotionScope } from "./scope";
 
-export function setupTindaTrackReviewHandoff(root: HTMLElement) {
-  const dark = root.querySelector<HTMLElement>("[data-review-handoff-dark]");
-
+export function setupTindaTrackReviewHandoff(
+  root: HTMLElement,
+) {
   const lavender = root.querySelector<HTMLElement>(
     "[data-review-handoff-lavender]",
   );
 
-  const light = root.querySelector<HTMLElement>("[data-review-handoff-light]");
+  const light = root.querySelector<HTMLElement>(
+    "[data-review-handoff-light]",
+  );
 
-  const line = root.querySelector<HTMLElement>("[data-review-handoff-line]");
-
-  if (!dark || !lavender || !light || !line) {
+  if (!lavender || !light) {
     return null;
   }
 
@@ -26,44 +26,26 @@ export function setupTindaTrackReviewHandoff(root: HTMLElement) {
       autoplay: false,
     })
       .add(
-        lavender,
+        light,
         {
-          scaleY: [0, 1],
-          duration: 360,
+          translateY: ["100%", "0%"],
+          duration: 500,
           ease: "linear",
         },
-        80,
+        120,
       )
       .add(
-        dark,
+        lavender,
         {
           opacity: [1, 0],
           duration: 260,
           ease: "linear",
         },
-        300,
-      )
-      .add(
-        light,
-        {
-          translateY: ["100%", "0%"],
-          duration: 360,
-          ease: "linear",
-        },
-        340,
-      )
-      .add(
-        lavender,
-        {
-          opacity: [1, 0],
-          duration: 220,
-          ease: "linear",
-        },
-        500,
+        360,
       );
 
     const clearAnimatedStyles = () => {
-      [dark, lavender, light, line].forEach((element) => {
+      [lavender, light].forEach((element) => {
         element.style.removeProperty("opacity");
         element.style.removeProperty("transform");
       });
@@ -78,17 +60,19 @@ export function setupTindaTrackReviewHandoff(root: HTMLElement) {
 
       const rect = root.getBoundingClientRect();
 
-      const scrollDistance = root.offsetHeight - window.innerHeight * 0.3;
+      const viewportProgress =
+        (window.innerHeight - rect.top) /
+        (window.innerHeight + root.offsetHeight);
 
-      if (scrollDistance <= 0) {
-        return;
-      }
+      const progress = Math.min(
+        Math.max(viewportProgress, 0),
+        1,
+      );
 
-      const progress = Math.min(Math.max(-rect.top / scrollDistance, 0), 1);
-
-      timeline.seek(timeline.duration * progress, true);
-
-      line.style.transform = `scaleX(${progress})`;
+      timeline.seek(
+        timeline.duration * progress,
+        true,
+      );
     };
 
     const scheduleUpdate = () => {
@@ -96,7 +80,8 @@ export function setupTindaTrackReviewHandoff(root: HTMLElement) {
         return;
       }
 
-      frameId = window.requestAnimationFrame(update);
+      frameId =
+        window.requestAnimationFrame(update);
     };
 
     const enable = () => {
@@ -138,20 +123,33 @@ export function setupTindaTrackReviewHandoff(root: HTMLElement) {
 
     syncEligibility();
 
-    window.addEventListener("scroll", scheduleUpdate, {
-      passive: true,
-    });
+    window.addEventListener(
+      "scroll",
+      scheduleUpdate,
+      {
+        passive: true,
+      },
+    );
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener(
+      "resize",
+      handleResize,
+    );
 
     return () => {
       if (frameId !== 0) {
         window.cancelAnimationFrame(frameId);
       }
 
-      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener(
+        "scroll",
+        scheduleUpdate,
+      );
 
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener(
+        "resize",
+        handleResize,
+      );
 
       delete root.dataset.enhanced;
 

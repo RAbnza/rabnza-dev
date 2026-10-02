@@ -72,7 +72,7 @@ links:
   source: "https://github.com/RAbnza/TindaTrack"
 
 publication:
-  published: false
+  published: true
   homepage: false
 ---
 

@@ -18,8 +18,14 @@ interface Props {
 const { sell, receipt, track } = Astro.props;
 ---
 
-<section class="flagship-sequence" data-tindatrack-sequence>
-  <div class="flagship-stage" data-sequence-stage>
+<section
+  class="flagship-sequence"
+  data-tindatrack-sequence
+>
+  <div
+    class="flagship-stage"
+    data-sequence-stage
+  >
     <div
       class="flagship-dark-environment"
       data-sequence-dark
@@ -37,19 +43,28 @@ const { sell, receipt, track } = Astro.props;
       data-sequence-panel="sell"
     >
       <div
-        class="container-wide grid gap-10 lg:grid-cols-12 lg:items-center"
+        class="grid gap-10 lg:grid-cols-12 lg:items-center"
         data-sequence-layout
       >
-        <div class="lg:col-span-4" data-sequence-sell-copy>
-          <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
+        <div
+          class="min-w-0 lg:col-span-4"
+          data-sequence-sell-copy
+        >
+          <p
+            class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase"
+          >
             01 — Sell
           </p>
 
-          <h2 class="mt-3 text-4xl font-semibold tracking-[-0.03em]">
+          <h2
+            class="mt-3 text-4xl font-semibold tracking-[-0.03em]"
+          >
             Record the sale without trusting the client.
           </h2>
 
-          <p class="mt-5 max-w-[52ch] leading-relaxed text-muted-foreground">
+          <p
+            class="mt-5 max-w-[52ch] leading-relaxed text-muted-foreground"
+          >
             The user builds the order in the interface, but the backend reloads
             authoritative product data, verifies inventory, and calculates the
             final prices and total before committing the transaction.
@@ -60,18 +75,28 @@ const { sell, receipt, track } = Astro.props;
           class="relative min-w-0 lg:col-span-7 lg:col-start-6"
           data-sequence-sell-media
         >
-          <ProjectMedia src={sell.src} alt={sell.alt} caption={sell.caption} />
+          <ProjectMedia
+            src={sell.src}
+            alt={sell.alt}
+            caption={sell.caption}
+          />
 
-          {receipt && (
-            <div class="flagship-receipt mt-8" data-sequence-receipt>
-              <ProjectMedia
-                src={receipt.src}
-                alt={receipt.alt}
-                caption={receipt.caption}
-                sizes="(max-width: 1023px) calc(100vw - 40px), 20vw"
-              />
-            </div>
-          )}
+          {
+            receipt && (
+              <div
+                class="flagship-receipt mt-8"
+                data-sequence-receipt
+              >
+                <ProjectMedia
+                  src={receipt.src}
+                  alt={receipt.alt}
+                  caption={receipt.caption}
+                  sizes="(max-width: 1023px) calc(100vw - 40px), 20vw"
+                  hideCaption
+                />
+              </div>
+            )
+          }
         </div>
       </div>
     </section>
@@ -81,19 +106,28 @@ const { sell, receipt, track } = Astro.props;
       data-sequence-panel="track"
     >
       <div
-        class="container-wide grid gap-10 lg:grid-cols-12 lg:items-center"
+        class="grid gap-10 lg:grid-cols-12 lg:items-center"
         data-sequence-layout
       >
-        <div class="lg:col-span-4" data-sequence-track-copy>
-          <p class="font-mono text-xs tracking-[0.08em] text-lavender uppercase">
+        <div
+          class="min-w-0 lg:col-span-4"
+          data-sequence-track-copy
+        >
+          <p
+            class="font-mono text-xs tracking-[0.08em] text-lavender uppercase"
+          >
             02 — Track
           </p>
 
-          <h2 class="mt-3 text-4xl font-semibold tracking-[-0.03em]">
+          <h2
+            class="mt-3 text-4xl font-semibold tracking-[-0.03em]"
+          >
             Treat inventory as evidence, not a mutable number.
           </h2>
 
-          <p class="mt-5 max-w-[52ch] leading-relaxed text-muted-dark">
+          <p
+            class="mt-5 max-w-[52ch] leading-relaxed text-muted-dark"
+          >
             Inventory is derived from signed stock movements. Receipts, sales,
             and adjustments leave records explaining why each quantity changed.
           </p>
@@ -113,14 +147,25 @@ const { sell, receipt, track } = Astro.props;
       </div>
     </section>
 
-    <div class="flagship-progress" data-sequence-progress aria-hidden="true">
-      <span data-sequence-progress-sell>Sell</span>
+    <div
+      class="flagship-progress"
+      data-sequence-progress
+      aria-hidden="true"
+    >
+      <span data-sequence-progress-sell>
+        Sell
+      </span>
 
       <div class="flagship-progress-track">
-        <span class="flagship-progress-fill" data-sequence-progress-fill></span>
+        <span
+          class="flagship-progress-fill"
+          data-sequence-progress-fill
+        ></span>
       </div>
 
-      <span data-sequence-progress-track>Track</span>
+      <span data-sequence-progress-track>
+        Track
+      </span>
     </div>
   </div>
 </section>
@@ -140,85 +185,138 @@ const { sell, receipt, track } = Astro.props;
     display: none;
   }
 
+  [data-sequence-layout] {
+    width: min(
+      calc(100% - 2.5rem),
+      var(--container-wide)
+    );
+    margin-inline: auto;
+  }
+
   .flagship-panel-track {
     background: var(--night-canvas);
+  }
+
+  @media (min-width: 48rem) {
+    [data-sequence-layout] {
+      width: min(
+        calc(100% - 4rem),
+        var(--container-wide)
+      );
+    }
+  }
+
+  @media (min-width: 64rem) {
+    [data-sequence-layout] {
+      width: min(
+        calc(100% - 6rem),
+        var(--container-wide)
+      );
+    }
   }
 
   [data-tindatrack-sequence][data-enhanced="true"] {
     height: 240svh;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-stage {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-stage {
     position: sticky;
     top: 0;
+
     height: 100svh;
+
     overflow: clip;
+
     background: var(--background);
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-panel {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-panel {
     position: absolute;
     inset: 0;
     z-index: 2;
+
     display: flex;
     align-items: center;
+
+    min-width: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-layout] {
-    width: 100%;
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-layout] {
+    width: min(
+      calc(100% - 6rem),
+      var(--container-wide)
+    );
+
+    margin-inline: auto;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-sell-media],
-  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-track-media] {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-sell-media],
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-track-media] {
     padding-bottom: 1rem;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-panel-track {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-panel-track {
     background: transparent;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-track-copy],
-  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-track-media] {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-track-copy],
+  [data-tindatrack-sequence][data-enhanced="true"]
+    [data-sequence-track-media] {
     opacity: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-dark-environment {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-dark-environment {
     position: absolute;
     inset: 0;
     z-index: 0;
+
     display: block;
+
     background: var(--night-canvas);
+
     opacity: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-lavender-bridge {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-lavender-bridge {
     position: absolute;
     inset: 0;
     z-index: 3;
+
     display: block;
+
     background: var(--lavender);
+
     transform: scaleX(0);
     transform-origin: left center;
+
     pointer-events: none;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-receipt {
+  [data-tindatrack-sequence][data-enhanced="true"]
+    .flagship-receipt {
     position: absolute;
     right: 1.25rem;
-    bottom: 1.25rem;
+    bottom: 3rem;
     z-index: 3;
-    width: min(26%, 13rem);
+
+    width: min(24%, 12rem);
+
     margin-top: 0;
+
     transform-origin: center;
   }
 
   [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-receipt
-    figcaption {
-    display: none;
-  }
-
-  [data-tindatrack-sequence][data-enhanced="true"] .flagship-progress {
+    .flagship-progress {
     position: absolute;
     left: 50%;
     bottom: 1.5rem;
@@ -228,7 +326,10 @@ const { sell, receipt, track } = Astro.props;
     align-items: center;
     gap: 0.75rem;
 
-    width: min(22rem, calc(100% - 3rem));
+    width: min(
+      22rem,
+      calc(100% - 3rem)
+    );
 
     transform: translateX(-50%);
 
@@ -241,7 +342,10 @@ const { sell, receipt, track } = Astro.props;
 
     pointer-events: none;
 
-    transition: color var(--duration-fast) var(--ease-state);
+    transition:
+      color
+      var(--duration-fast)
+      var(--ease-state);
   }
 
   [data-tindatrack-sequence][data-enhanced="true"][data-phase="track"]
@@ -253,7 +357,10 @@ const { sell, receipt, track } = Astro.props;
   [data-sequence-progress-track] {
     opacity: 0.45;
 
-    transition: opacity var(--duration-fast) var(--ease-state);
+    transition:
+      opacity
+      var(--duration-fast)
+      var(--ease-state);
   }
 
   [data-tindatrack-sequence][data-enhanced="true"][data-phase="sell"]
@@ -265,18 +372,25 @@ const { sell, receipt, track } = Astro.props;
 
   .flagship-progress-track {
     height: 1px;
+
     flex: 1;
+
     overflow: hidden;
+
     background: currentColor;
+
     opacity: 0.3;
   }
 
   .flagship-progress-fill {
     display: block;
+
     width: 100%;
     height: 100%;
+
     transform: scaleX(0);
     transform-origin: left center;
+
     background: currentColor;
   }
 </style>

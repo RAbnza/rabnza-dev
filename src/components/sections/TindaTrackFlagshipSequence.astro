@@ -18,14 +18,8 @@ interface Props {
 const { sell, receipt, track } = Astro.props;
 ---
 
-<section
-  class="flagship-sequence"
-  data-tindatrack-sequence
->
-  <div
-    class="flagship-stage"
-    data-sequence-stage
-  >
+<section class="flagship-sequence" data-tindatrack-sequence>
+  <div class="flagship-stage" data-sequence-stage>
     <div
       class="flagship-dark-environment"
       data-sequence-dark
@@ -46,25 +40,16 @@ const { sell, receipt, track } = Astro.props;
         class="grid gap-10 lg:grid-cols-12 lg:items-center"
         data-sequence-layout
       >
-        <div
-          class="min-w-0 lg:col-span-4"
-          data-sequence-sell-copy
-        >
-          <p
-            class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase"
-          >
+        <div class="min-w-0 lg:col-span-4" data-sequence-sell-copy>
+          <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
             01 — Sell
           </p>
 
-          <h2
-            class="mt-3 text-4xl font-semibold tracking-[-0.03em]"
-          >
+          <h2 class="mt-3 text-4xl font-semibold tracking-[-0.03em]">
             Record the sale without trusting the client.
           </h2>
 
-          <p
-            class="mt-5 max-w-[52ch] leading-relaxed text-muted-foreground"
-          >
+          <p class="mt-5 max-w-[52ch] leading-relaxed text-muted-foreground">
             The user builds the order in the interface, but the backend reloads
             authoritative product data, verifies inventory, and calculates the
             final prices and total before committing the transaction.
@@ -76,38 +61,25 @@ const { sell, receipt, track } = Astro.props;
           data-sequence-sell-media
         >
           <div class="flagship-sell-visual">
-            <ProjectMedia
-              src={sell.src}
-              alt={sell.alt}
-              hideCaption
-            />
+            <ProjectMedia src={sell.src} alt={sell.alt} hideCaption />
 
-            {
-              receipt && (
-                <div
-                  class="flagship-receipt"
-                  data-sequence-receipt
-                >
-                  <ProjectMedia
-                    src={receipt.src}
-                    alt={receipt.alt}
-                    hideCaption
-                    sizes="(max-width: 1023px) calc(100vw - 40px), 20vw"
-                  />
-                </div>
-              )
-            }
+            {receipt && (
+              <div class="flagship-receipt" data-sequence-receipt>
+                <ProjectMedia
+                  src={receipt.src}
+                  alt={receipt.alt}
+                  hideCaption
+                  sizes="(max-width: 1023px) calc(100vw - 40px), 20vw"
+                />
+              </div>
+            )}
           </div>
 
-          {
-            sell.caption && (
-              <p
-                class="flagship-sell-caption mt-3 text-sm leading-relaxed text-muted-foreground"
-              >
-                {sell.caption}
-              </p>
-            )
-          }
+          {sell.caption && (
+            <p class="flagship-sell-caption mt-3 text-sm leading-relaxed text-muted-foreground">
+              {sell.caption}
+            </p>
+          )}
         </div>
       </div>
     </section>
@@ -120,25 +92,16 @@ const { sell, receipt, track } = Astro.props;
         class="grid gap-10 lg:grid-cols-12 lg:items-center"
         data-sequence-layout
       >
-        <div
-          class="min-w-0 lg:col-span-4"
-          data-sequence-track-copy
-        >
-          <p
-            class="font-mono text-xs tracking-[0.08em] text-lavender uppercase"
-          >
+        <div class="min-w-0 lg:col-span-4" data-sequence-track-copy>
+          <p class="font-mono text-xs tracking-[0.08em] text-lavender uppercase">
             02 — Track
           </p>
 
-          <h2
-            class="mt-3 text-4xl font-semibold tracking-[-0.03em]"
-          >
+          <h2 class="mt-3 text-4xl font-semibold tracking-[-0.03em]">
             Treat inventory as evidence, not a mutable number.
           </h2>
 
-          <p
-            class="mt-5 max-w-[52ch] leading-relaxed text-muted-dark"
-          >
+          <p class="mt-5 max-w-[52ch] leading-relaxed text-muted-dark">
             Inventory is derived from signed stock movements. Receipts, sales,
             and adjustments leave records explaining why each quantity changed.
           </p>
@@ -158,25 +121,14 @@ const { sell, receipt, track } = Astro.props;
       </div>
     </section>
 
-    <div
-      class="flagship-progress"
-      data-sequence-progress
-      aria-hidden="true"
-    >
-      <span data-sequence-progress-sell>
-        Sell
-      </span>
+    <div class="flagship-progress" data-sequence-progress aria-hidden="true">
+      <span data-sequence-progress-sell>Sell</span>
 
       <div class="flagship-progress-track">
-        <span
-          class="flagship-progress-fill"
-          data-sequence-progress-fill
-        ></span>
+        <span class="flagship-progress-fill" data-sequence-progress-fill></span>
       </div>
 
-      <span data-sequence-progress-track>
-        Track
-      </span>
+      <span data-sequence-progress-track>Track</span>
     </div>
   </div>
 </section>
@@ -197,10 +149,7 @@ const { sell, receipt, track } = Astro.props;
   }
 
   [data-sequence-layout] {
-    width: min(
-      calc(100% - 2.5rem),
-      var(--container-wide)
-    );
+    width: min(calc(100% - 2.5rem), var(--container-wide));
     margin-inline: auto;
   }
 
@@ -214,19 +163,13 @@ const { sell, receipt, track } = Astro.props;
 
   @media (min-width: 48rem) {
     [data-sequence-layout] {
-      width: min(
-        calc(100% - 4rem),
-        var(--container-wide)
-      );
+      width: min(calc(100% - 4rem), var(--container-wide));
     }
   }
 
   @media (min-width: 64rem) {
     [data-sequence-layout] {
-      width: min(
-        calc(100% - 6rem),
-        var(--container-wide)
-      );
+      width: min(calc(100% - 6rem), var(--container-wide));
     }
   }
 
@@ -234,8 +177,7 @@ const { sell, receipt, track } = Astro.props;
     height: 240svh;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-stage {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-stage {
     position: sticky;
     top: 0;
 
@@ -246,8 +188,7 @@ const { sell, receipt, track } = Astro.props;
     background: var(--background);
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-panel {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-panel {
     position: absolute;
     inset: 0;
     z-index: 2;
@@ -258,37 +199,27 @@ const { sell, receipt, track } = Astro.props;
     min-width: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    [data-sequence-layout] {
-    width: min(
-      calc(100% - 6rem),
-      var(--container-wide)
-    );
+  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-layout] {
+    width: min(calc(100% - 6rem), var(--container-wide));
 
     margin-inline: auto;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    [data-sequence-sell-media],
-  [data-tindatrack-sequence][data-enhanced="true"]
-    [data-sequence-track-media] {
+  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-sell-media],
+  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-track-media] {
     padding-bottom: 1rem;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-panel-track {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-panel-track {
     background: transparent;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    [data-sequence-track-copy],
-  [data-tindatrack-sequence][data-enhanced="true"]
-    [data-sequence-track-media] {
+  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-track-copy],
+  [data-tindatrack-sequence][data-enhanced="true"] [data-sequence-track-media] {
     opacity: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-dark-environment {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-dark-environment {
     position: absolute;
     inset: 0;
     z-index: 0;
@@ -300,8 +231,7 @@ const { sell, receipt, track } = Astro.props;
     opacity: 0;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-lavender-bridge {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-lavender-bridge {
     position: absolute;
     inset: 0;
     z-index: 3;
@@ -316,8 +246,7 @@ const { sell, receipt, track } = Astro.props;
     pointer-events: none;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-receipt {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-receipt {
     position: absolute;
     right: 1.25rem;
     bottom: 1.25rem;
@@ -330,8 +259,7 @@ const { sell, receipt, track } = Astro.props;
     transform-origin: center;
   }
 
-  [data-tindatrack-sequence][data-enhanced="true"]
-    .flagship-progress {
+  [data-tindatrack-sequence][data-enhanced="true"] .flagship-progress {
     position: absolute;
     left: 50%;
     bottom: 1.5rem;
@@ -341,10 +269,7 @@ const { sell, receipt, track } = Astro.props;
     align-items: center;
     gap: 0.75rem;
 
-    width: min(
-      22rem,
-      calc(100% - 3rem)
-    );
+    width: min(22rem, calc(100% - 3rem));
 
     transform: translateX(-50%);
 
@@ -357,10 +282,7 @@ const { sell, receipt, track } = Astro.props;
 
     pointer-events: none;
 
-    transition:
-      color
-      var(--duration-fast)
-      var(--ease-state);
+    transition: color var(--duration-fast) var(--ease-state);
   }
 
   [data-tindatrack-sequence][data-enhanced="true"][data-phase="track"]
@@ -372,10 +294,7 @@ const { sell, receipt, track } = Astro.props;
   [data-sequence-progress-track] {
     opacity: 0.45;
 
-    transition:
-      opacity
-      var(--duration-fast)
-      var(--ease-state);
+    transition: opacity var(--duration-fast) var(--ease-state);
   }
 
   [data-tindatrack-sequence][data-enhanced="true"][data-phase="sell"]

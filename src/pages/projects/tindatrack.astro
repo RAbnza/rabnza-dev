@@ -4,6 +4,7 @@ import { getEntry, render } from "astro:content";
 import CaseStudyChapter from "@/components/sections/CaseStudyChapter.astro";
 import TindaTrackEngineering from "@/components/sections/TindaTrackEngineering.astro";
 import TindaTrackFlagshipSequence from "@/components/sections/TindaTrackFlagshipSequence.astro";
+import TindaTrackReviewHandoff from "@/components/sections/TindaTrackReviewHandoff.astro";
 import ProjectMedia from "@/components/ui/ProjectMedia.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -147,6 +148,8 @@ const reviewMedia = gallery.find((item) => item.role === "review");
         />
       )}
 
+      <TindaTrackReviewHandoff />
+
       {reviewMedia && (
         <CaseStudyChapter
           eyebrow="03 — Review"
@@ -201,6 +204,7 @@ const reviewMedia = gallery.find((item) => item.role === "review");
 
 <script>
   import { setupCaseStudyMotion } from "@/lib/motion/case-study";
+  import { setupTindaTrackReviewHandoff } from "@/lib/motion/tindatrack-review-handoff";
   import { setupTindaTrackSequence } from "@/lib/motion/tindatrack-sequence";
 
   function initializeTindaTrackMotion() {
@@ -229,6 +233,18 @@ const reviewMedia = gallery.find((item) => item.role === "review");
 
       if (sequenceScope) {
         scopes.push(sequenceScope);
+      }
+    }
+
+    const reviewHandoff = root.querySelector<HTMLElement>(
+      "[data-review-handoff]",
+    );
+
+    if (reviewHandoff) {
+      const reviewHandoffScope = setupTindaTrackReviewHandoff(reviewHandoff);
+
+      if (reviewHandoffScope) {
+        scopes.push(reviewHandoffScope);
       }
     }
 

@@ -1,0 +1,94 @@
+<section class="review-handoff" data-review-handoff aria-hidden="true">
+  <div class="review-handoff-dark" data-review-handoff-dark></div>
+
+  <div class="review-handoff-lavender" data-review-handoff-lavender></div>
+
+  <div class="review-handoff-light" data-review-handoff-light></div>
+
+  <div class="review-handoff-label">
+    <span>Track</span>
+
+    <span class="review-handoff-line" data-review-handoff-line></span>
+
+    <span>Review</span>
+  </div>
+</section>
+
+<style>
+  .review-handoff {
+    position: relative;
+    display: none;
+  }
+
+  .review-handoff-dark,
+  .review-handoff-lavender,
+  .review-handoff-light {
+    position: absolute;
+    inset: 0;
+  }
+
+  .review-handoff-dark {
+    z-index: 0;
+    background: var(--night-canvas);
+  }
+
+  .review-handoff-lavender {
+    z-index: 1;
+    background: var(--lavender);
+    transform: scaleY(0);
+    transform-origin: top center;
+  }
+
+  .review-handoff-light {
+    z-index: 2;
+    background: var(--silver-canvas);
+    transform: translateY(100%);
+  }
+
+  .review-handoff-label {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    z-index: 3;
+
+    display: flex;
+    width: min(22rem, calc(100% - 3rem));
+    align-items: center;
+    gap: 0.75rem;
+
+    transform: translateX(-50%);
+
+    color: var(--light-text);
+
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .review-handoff-label span:first-child,
+  .review-handoff-label span:last-child {
+    opacity: 0.55;
+  }
+
+  .review-handoff-line {
+    height: 1px;
+    flex: 1;
+
+    background: currentColor;
+
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  [data-review-handoff][data-enhanced="true"] {
+    display: block;
+    height: 70svh;
+    overflow: clip;
+  }
+
+  [data-review-handoff][data-enhanced="true"] .review-handoff-label {
+    position: sticky;
+    top: calc(100svh - 4rem);
+  }
+</style>

@@ -37,16 +37,14 @@ const {
     />
   </div>
 
-  {
-    caption && !hideCaption && (
-      <figcaption
-        class:list={[
-          "mt-3 text-sm leading-relaxed",
-          dark ? "text-muted-dark" : "text-muted-foreground",
-        ]}
-      >
-        {caption}
-      </figcaption>
-    )
-  }
+  {caption && !hideCaption && (
+    <figcaption
+      class:list={[
+        "mt-3 text-sm leading-relaxed",
+        dark ? "text-muted-dark" : "text-muted-foreground",
+      ]}
+    >
+      {caption}
+    </figcaption>
+  )}
 </figure>

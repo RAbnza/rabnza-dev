@@ -8,74 +8,78 @@ const projects = defineCollection({
     base: "./src/content/projects",
   }),
 
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
 
-    type: z.enum([
-      "full-stack",
-      "frontend",
-      "backend",
-      "web-application",
-      "website",
-      "portfolio",
-      "other",
-    ]),
+      type: z.enum([
+        "full-stack",
+        "frontend",
+        "backend",
+        "web-application",
+        "website",
+        "portfolio",
+        "other",
+      ]),
 
-    priority: z.number().int().positive(),
+      priority: z.number().int().positive(),
 
-    featured: z.boolean().default(false),
+      featured: z.boolean().default(false),
 
-    status: z.enum([
-      "completed",
-      "in-development",
-      "archived",
-      "retrospective",
-    ]),
+      status: z.enum([
+        "completed",
+        "in-development",
+        "archived",
+        "retrospective",
+      ]),
 
-    technologies: z.array(z.string()).default([]),
+      technologies: z.array(z.string()).default([]),
 
-    contribution: z.object({
-      role: z.string(),
-      teamContext: z.string().optional(),
-      details: z.array(z.string()).default([]),
-    }),
+      contribution: z.object({
+        role: z.string(),
+        teamContext: z.string().optional(),
+        details: z.array(z.string()).default([]),
+      }),
 
-    dates: z
-      .object({
-        started: z.string().optional(),
-        completed: z.string().optional(),
-      })
-      .optional(),
+      dates: z
+        .object({
+          started: z.string().optional(),
+          completed: z.string().optional(),
+        })
+        .optional(),
 
-    cover: z
-      .object({
-        src: z.string(),
-        alt: z.string(),
-        caption: z.string().optional(),
-      })
-      .optional(),
-
-    gallery: z
-      .array(
-        z.object({
-          src: z.string(),
+      cover: z
+        .object({
+          src: image(),
           alt: z.string(),
           caption: z.string().optional(),
-        }),
-      )
-      .default([]),
+        })
+        .optional(),
 
-    links: z.object({
-      demo: z.string().url().optional(),
-      source: z.string().url().optional(),
-    }),
+      gallery: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string(),
+            caption: z.string().optional(),
+            role: z
+              .enum(["sell", "track", "review", "supporting"])
+              .default("supporting"),
+          }),
+        )
+        .default([]),
 
-    publication: z.object({
-      published: z.boolean().default(false),
-      homepage: z.boolean().default(false),
+      links: z.object({
+        demo: z.string().url().optional(),
+        source: z.string().url().optional(),
+      }),
+
+      publication: z.object({
+        published: z.boolean().default(false),
+        homepage: z.boolean().default(false),
+      }),
     }),
-  }),
 });
 
 export const collections = {

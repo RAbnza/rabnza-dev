@@ -6,4 +6,5 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/rendel-abainza/",
   education: "BS Computer Science",
   university: "Polytechnic University of the Philippines",
+  academicHonors: "Cum Laude",
 } as const;

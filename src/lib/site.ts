@@ -8,7 +8,10 @@ import {
 import { setupNavigation } from "./navigation";
 import { setupContactForm } from "./contact";
 
+let initialized = false;
 export function setupSite() {
+  if (initialized) return;
+  initialized = true;
   const select =
     document.querySelector<HTMLSelectElement>("#motion-preference");
   const update = () => {

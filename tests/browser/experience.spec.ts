@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-test("branded startup is brief and identity controls are keyboard accessible", async ({
+test("cinematic startup completes and identity controls are keyboard accessible", async ({
   page,
 }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-startup]")).toBeVisible();
   await expect(page.locator("[data-startup]")).not.toBeVisible({
-    timeout: 2000,
+    timeout: 6000,
   });
   await expect(page.locator("h1")).toContainText("Rendel");
   await expect(page.locator(".personal-opening img")).toHaveCount(0);
@@ -23,7 +23,7 @@ test("branded startup is brief and identity controls are keyboard accessible", a
   );
   await page.reload();
   await expect(page.locator("[data-startup]")).not.toBeVisible({
-    timeout: 2000,
+    timeout: 6000,
   });
 });
 
@@ -120,4 +120,87 @@ test("blocked session storage cannot trap the intro and mobile identity controls
     "aria-pressed",
     "true",
   );
+});
+
+test("motion opening holds the loader, introduces the idea, and remains skippable", async ({
+  page,
+}) => {
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute("data-intro", "playing");
+  await page.waitForTimeout(800);
+  await expect(page.locator("[data-startup]")).toBeVisible();
+  await expect(page.locator(".startup-center")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".intro-scene")).toHaveCSS("opacity", "1", {
+    timeout: 3000,
+  });
+  await expect(page.locator("[data-startup]")).toBeVisible();
+  await page.getByRole("button", { name: "Skip intro" }).click();
+  await expect(page.locator("[data-startup]")).not.toBeVisible();
+  await expect(page.locator("h1")).toContainText("Rendel");
+  await page.goto("/#tech-stack");
+  await expect(page.locator("[data-startup]")).not.toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Tech stack." }),
+  ).toBeVisible();
+});
+
+test("motion journey progresses and reverses on desktop and mobile, then cleans up", async ({
+  page,
+}) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/#about");
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-journey-motion",
+      "true",
+    );
+    const plane = page.locator("[data-tech-plane]").first();
+    const move = async (fraction: number) => {
+      await page.evaluate((fraction) => {
+        const stack = document.querySelector(".tech-stack")!;
+        const top = stack.getBoundingClientRect().top + scrollY;
+        window.scrollTo({
+          top: top - innerHeight * 0.7 + stack.clientHeight * fraction,
+          behavior: "instant",
+        });
+      }, fraction);
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          ),
+      );
+    };
+    await move(-0.5);
+    await expect
+      .poll(() => plane.evaluate((el) => el.style.transform))
+      .not.toBe("");
+    const before = await plane.evaluate((el) => el.style.transform);
+    const beforeX = await plane.evaluate(
+      (el) => new DOMMatrix(getComputedStyle(el).transform).m41,
+    );
+    await move(0.7);
+    await expect
+      .poll(() => plane.evaluate((el) => el.style.transform))
+      .not.toBe(before);
+    await move(-0.5);
+    await expect
+      .poll(async () =>
+        Math.abs(
+          (await plane.evaluate(
+            (el) => new DOMMatrix(getComputedStyle(el).transform).m41,
+          )) - beforeX,
+        ),
+      )
+      .toBeLessThan(1);
+    await page.selectOption("#motion-preference", "reduced");
+    await expect(page.locator("html")).not.toHaveAttribute(
+      "data-journey-motion",
+    );
+    await expect(page.locator(".text-mask")).toHaveCount(0);
+    await expect(plane).not.toHaveAttribute("style", /transform/);
+    await expect(page.locator("#tech-title")).toHaveText("Tech stack.");
+    await page.selectOption("#motion-preference", "full");
+  }
 });

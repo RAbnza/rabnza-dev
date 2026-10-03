@@ -3,13 +3,29 @@ import IdentityMark from "@/components/ui/IdentityMark.astro";
 ---
 
 <div class="startup-intro" data-startup>
+  <div class="startup-atmosphere" aria-hidden="true"></div>
   <div class="startup-center" aria-hidden="true">
-    <IdentityMark class="startup-mark" />
-    <p class="eyebrow">Rendel Abainza</p>
-    <div class="startup-line">
-      <span data-intro-line></span>
+    <div class="startup-emblem">
+      <span class="startup-plane" data-loader-plane></span>
+      <span class="startup-plane" data-loader-plane></span>
+      <span class="startup-plane" data-loader-plane></span>
+      <IdentityMark class="startup-mark" />
     </div>
-    <p class="startup-tagline">Useful software. Thoughtfully built.</p>
+    <p class="startup-signature mono">
+      Rendel Abainza <span>/ Developer</span>
+    </p>
+  </div>
+  <div class="intro-scene" aria-hidden="true">
+    <p class="mono intro-kicker">A way of seeing. A way of building.</p>
+    <p class="intro-statement">
+      <span class="intro-mask">
+        <span data-intro-phrase>Start with curiosity.</span>
+      </span>
+      <span class="intro-mask">
+        <span data-intro-phrase>Build with intention.</span>
+      </span>
+    </p>
+    <span class="intro-note mono">An introduction, by Rendel.</span>
   </div>
   <button type="button" data-skip-intro>
     Skip intro <span aria-hidden="true">↗</span>

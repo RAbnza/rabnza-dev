@@ -1,54 +1,125 @@
-import { animate, createTimeline } from "animejs";
+import { animate, createTimeline, stagger } from "animejs";
 import { shouldReduceMotion, observeMotionPreference } from "./preferences";
-import { motionEasings } from "./config";
+import { motionDurations, motionEasings } from "./config";
 
-/** A short brand greeting, never a resource-download gate. */
+/** A finite brand sequence, never a pretend download meter or scroll lock. */
 export function setupOpening() {
   const root = document.documentElement;
   const overlay = document.querySelector<HTMLElement>("[data-startup]");
   let intro: ReturnType<typeof createTimeline> | undefined;
+  let watchdog = 0;
+  let finished = false;
+  const events = new AbortController();
+  const releaseHero = () => {
+    if (root.dataset.heroReady === "true") return;
+    root.dataset.heroReady = "true";
+    document.dispatchEvent(new Event("portfolio:hero-ready"));
+  };
   const finish = () => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(watchdog);
+    events.abort();
+    releaseHero();
     root.removeAttribute("data-intro");
-    intro?.revert();
+    // Completion is not teardown: rewinding here resets visible text to its start.
+    intro?.cancel();
+    document.dispatchEvent(new Event("portfolio:opening-complete"));
   };
   if (overlay && root.hasAttribute("data-intro") && !shouldReduceMotion()) {
-    const duration = root.dataset.returning === "true" ? 320 : 620;
-    intro = createTimeline({ onComplete: finish })
+    root.dataset.intro = "playing";
+    const compact =
+      window.innerWidth < 768 || root.dataset.returning === "true";
+    const hold = compact ? 1150 : motionDurations.loader;
+    intro = createTimeline({
+      autoplay: false,
+      onComplete: finish,
+      defaults: { ease: motionEasings.entrance },
+    })
       .add(
-        "[data-intro-line]",
+        "[data-loader-plane]",
         {
-          scaleX: [0, 1],
-          duration: duration * 0.65,
-          ease: motionEasings.state,
+          translateY: (_: unknown, i = 0) => [90 - i * 75, (i - 1) * 18],
+          translateX: (_: unknown, i = 0) => [(i - 1) * 100, (i - 1) * 24],
+          rotate: (_: unknown, i = 0) => [(i - 1) * 38, -24],
+          scale: [0.65, 1],
+          opacity: [0, 1],
+          duration: 1000,
+          delay: stagger(100),
         },
         0,
       )
       .add(
         ".startup-mark",
-        {
-          translateY: [8, 0],
-          opacity: [0.5, 1],
-          duration: duration * 0.55,
-          ease: motionEasings.entrance,
-        },
+        { opacity: [0, 1], scale: [0.8, 1], duration: 650 },
+        450,
+      )
+      .add(
+        ".startup-signature",
+        { opacity: [0, 1], translateY: [10, 0], duration: 500 },
+        550,
+      )
+      .add(
+        ".startup-center",
+        { opacity: [1, 0], scale: [1, 1.16], duration: 400 },
+        hold,
+      )
+      .add(
+        ".startup-atmosphere",
+        { scale: [0.6, 1.4], opacity: [0.3, 0.7], duration: hold + 1100 },
         0,
+      )
+      .add(".intro-scene", { opacity: [0, 1], duration: 100 }, hold + 200)
+      .add(
+        ".intro-kicker, .intro-note",
+        { opacity: [0, 1], translateY: [8, 0], duration: 650 },
+        hold + 300,
+      )
+      .add(
+        "[data-intro-phrase]",
+        {
+          translateY: ["110%", "0%"],
+          rotate: [3, 0],
+          duration: 850,
+          delay: stagger(190),
+        },
+        hold + 250,
+      )
+      .add(
+        ".intro-scene",
+        { translateY: [0, -24], opacity: [1, 0], duration: 450 },
+        hold + 1600,
       )
       .add(
         overlay,
         {
-          opacity: [1, 0],
-          duration: duration * 0.35,
-          ease: motionEasings.state,
+          clipPath: ["inset(0% 0% 0% 0%)", "inset(0% 0% 100% 0%)"],
+          duration: 850,
         },
-        duration * 0.65,
-      );
+        hold + 1780,
+      )
+      .call(releaseHero, hold + 1780);
+    intro.play();
+    watchdog = window.setTimeout(finish, 6200);
   } else finish();
   const skip = document.querySelector("[data-skip-intro]");
-  skip?.addEventListener("click", finish);
+  skip?.addEventListener("click", finish, { signal: events.signal });
   const onKey = () => {
     if (root.hasAttribute("data-intro")) finish();
   };
-  document.addEventListener("keydown", onKey);
+  document.addEventListener("keydown", onKey, { signal: events.signal });
+  window.addEventListener("hashchange", finish, { signal: events.signal });
+  document.addEventListener("portfolio:skip-opening", finish, {
+    signal: events.signal,
+  });
+  // Scrolling is always native. An intentional scroll also dismisses the opening.
+  const onScroll = () => {
+    if (window.scrollY > 30) finish();
+  };
+  window.addEventListener("scroll", onScroll, {
+    passive: true,
+    signal: events.signal,
+  });
 
   const choices = Array.from(
     document.querySelectorAll<HTMLButtonElement>("[data-identity-choice]"),
@@ -108,6 +179,7 @@ export function setupOpening() {
   });
   return () => {
     finish();
+    intro?.revert();
     handlers.forEach((stop) => stop());
     animations.forEach((animation) => animation.revert());
     layers.forEach((layer) => {
@@ -117,5 +189,8 @@ export function setupOpening() {
     stopPreference();
     skip?.removeEventListener("click", finish);
     document.removeEventListener("keydown", onKey);
+    window.removeEventListener("hashchange", finish);
+    document.removeEventListener("portfolio:skip-opening", finish);
+    window.removeEventListener("scroll", onScroll);
   };
 }

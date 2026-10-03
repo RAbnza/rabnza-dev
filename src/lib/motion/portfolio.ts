@@ -1,12 +1,15 @@
-import { animate, createScope, createTimeline } from "animejs";
+import { createTimeline } from "animejs";
 import { observeMotionPreference, shouldReduceMotion } from "./preferences";
-import { motionDurations, motionEasings } from "./config";
 import { setupOpening } from "./opening";
 import { setupJourney } from "./journey";
+import { setupTextReveals } from "./text";
 
 /** Progressive enhancement: content is readable until this scope is ready. */
+let activeCleanup: (() => void) | undefined;
 export function setupMotion(root: HTMLElement | null) {
-  const stopOpening = setupOpening();
+  if (activeCleanup) return activeCleanup;
+  const seen = new WeakSet<Element>();
+  let stopText = () => {};
   let disposeScene = () => {};
   let disposed = false;
   const query = window.matchMedia("(min-width: 64rem) and (min-height: 45rem)");
@@ -14,57 +17,40 @@ export function setupMotion(root: HTMLElement | null) {
   const rebuild = () => {
     disposeScene();
     if (disposed || shouldReduceMotion()) return;
-    const scope = createScope({ root: document.body });
-    scope.add(() => {
-      // Observer callbacks run after scope construction; own their animations explicitly.
-      const reveals = new Set<ReturnType<typeof animate>>();
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue;
-            revealObserver.unobserve(entry.target);
-            // No pre-hidden content: even an interrupted import remains readable.
-            const animation = animate(entry.target, {
-              translateY: [12, 0],
-              duration: motionDurations.reveal,
-              ease: motionEasings.entrance,
-              onComplete: () => {
-                animation.revert();
-                reveals.delete(animation);
-              },
-            });
-            reveals.add(animation);
-          }
-        },
-        { threshold: 0.08 },
-      );
-      document
-        .querySelectorAll("[data-reveal]")
-        .forEach((element) => revealObserver.observe(element));
-      const stopStory = root && query.matches ? setupStory(root) : () => {};
-      const stopJourney = setupJourney();
-      return () => {
-        revealObserver.disconnect();
-        reveals.forEach((animation) => animation.revert());
-        reveals.clear();
-        stopStory();
-        stopJourney();
-      };
-    });
-    disposeScene = () => scope.revert();
+    const stopJourney = setupJourney();
+    const stopStory = root && query.matches ? setupStory(root) : () => {};
+    disposeScene = () => {
+      stopStory();
+      stopJourney();
+    };
   };
-  const stopPreference = observeMotionPreference(rebuild);
+  let reduced = shouldReduceMotion();
+  if (!reduced) stopText = setupTextReveals(seen);
+  // Text owns a document lifetime, independently of responsive scroll geometry.
+  const stopOpening = setupOpening();
+  const stopPreference = observeMotionPreference(() => {
+    const next = shouldReduceMotion();
+    if (next === reduced) return;
+    reduced = next;
+    stopText();
+    stopText = next ? () => {} : setupTextReveals(seen);
+    rebuild();
+  });
   query.addEventListener("change", rebuild);
   mobileQuery.addEventListener("change", rebuild);
   rebuild();
-  return () => {
+  activeCleanup = () => {
+    if (disposed) return;
     disposed = true;
-    stopOpening();
+    stopText();
     disposeScene();
+    stopOpening();
     stopPreference();
     query.removeEventListener("change", rebuild);
     mobileQuery.removeEventListener("change", rebuild);
+    activeCleanup = undefined;
   };
+  return activeCleanup;
 }
 
 function setupStory(root: HTMLElement) {

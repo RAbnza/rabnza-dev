@@ -31,7 +31,7 @@ const isHome = Astro.url.pathname === "/";
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f7f7fa" />
@@ -102,15 +102,44 @@ const isHome = Astro.url.pathname === "/";
           root.removeAttribute("data-intro");
           return;
         }
-        const finish = () => root.removeAttribute("data-intro");
-        setTimeout(finish, 1400);
-        document.addEventListener("keydown", finish, { once: true });
-        document.addEventListener("pointerdown", (event) => {
-          if (event.target.closest("[data-skip-intro]")) finish();
+        const events = new AbortController();
+        const cleanup = () => {
+          clearTimeout(pendingTimer);
+          clearTimeout(deadline);
+          events.abort();
+        };
+        const finish = () => {
+          document.dispatchEvent(new Event("portfolio:skip-opening"));
+          root.removeAttribute("data-intro");
+          cleanup();
+        };
+        // Failed imports get a short escape; a running sequence owns its deadline.
+        const pendingTimer = setTimeout(() => {
+          if (root.dataset.intro === "pending") finish();
+        }, 1400);
+        const deadline = setTimeout(finish, 6500);
+        document.addEventListener("portfolio:opening-complete", cleanup, {
+          once: true,
+          signal: events.signal,
         });
-        window.addEventListener("pageshow", (event) => {
-          if (event.persisted) finish();
+        document.addEventListener("keydown", finish, {
+          once: true,
+          signal: events.signal,
         });
+        document.addEventListener(
+          "pointerdown",
+          (event) => {
+            if (event.target.closest("[data-skip-intro]")) finish();
+          },
+          { signal: events.signal },
+        );
+        window.addEventListener(
+          "pageshow",
+          (event) => {
+            if (event.persisted) finish();
+          },
+          { signal: events.signal },
+        );
       })();
     </script>}
   </head>

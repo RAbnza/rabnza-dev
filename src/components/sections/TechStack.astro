@@ -1,0 +1,46 @@
+---
+import { technologyGroups } from "@/data/technologies";
+import Icon from "@/components/ui/Icon.astro";
+---
+
+<div class="tech-stack" id="tech-stack" aria-labelledby="tech-title">
+  <div class="tech-heading">
+    <p class="eyebrow">The working toolkit</p>
+    <h3 id="tech-title">
+      Tech stack<span>.</span>
+    </h3>
+    <p>Tools I build with and have worked with across my projects.</p>
+    <div class="tech-diagram" aria-hidden="true">
+      <span data-tech-plane></span>
+      <span data-tech-plane></span>
+      <span data-tech-plane></span>
+    </div>
+    <p class="tech-footnote">
+      Grounded in the work. Follow a project for context.
+    </p>
+  </div>
+  <div class="tech-ledger">
+    {technologyGroups.map((group, index) => (
+      <article class="tech-row">
+        <span class="tech-number mono">0{index + 1}</span>
+        <div>
+          <h4>{group.title}</h4>
+          <ul class="tech-tools">
+            {group.tools.map((tool) => (
+              <li>{tool}</li>
+            ))}
+          </ul>
+          <p>{group.context}</p>
+          <div class="tech-evidence">
+            {group.references.map((reference) => (
+              <a href={reference.href}>
+                {reference.label}
+                <Icon name="ArrowUpRight" size={14} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</div>

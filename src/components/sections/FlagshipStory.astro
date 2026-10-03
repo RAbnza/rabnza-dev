@@ -48,27 +48,33 @@ const chapters = [
   <div class="container-main">
     <header class="flagship-header">
       <div>
-        <p class="eyebrow">03 / Selected work</p>
-        <h2 id="flagship-title">
+        <p class="eyebrow" data-arrival="label">
+          03 / Selected work
+        </p>
+        <h2 id="flagship-title" data-arrival="title">
           TindaTrack<span>.</span>
         </h2>
-        <p>
+        <p data-arrival="body">
           Small-store operations.
           <br />
           Full-stack thinking.
         </p>
       </div>
       <div class="flagship-intro">
-        <p>
+        <p data-arrival="body">
           An inventory and sales application for small local retailers. A closer
           look at the system behind the screen.
         </p>
-        <a class="button" href="/projects/tindatrack/">
+        <a class="button" href="/projects/tindatrack/" data-arrival="action">
           Read the case study <Icon name="ArrowUpRight" />
         </a>
       </div>
     </header>
-    <nav class="chapter-nav" aria-label="TindaTrack chapters">
+    <nav
+      class="chapter-nav"
+      aria-label="TindaTrack chapters"
+      data-arrival="navigation"
+    >
       {chapters.map((chapter) => (
         <a href={`#${chapter.id}`} data-chapter-link={chapter.id}>
           <span class="mono">{chapter.number}</span>
@@ -103,7 +109,7 @@ const chapters = [
         ))}
       </div>
       <div class="story-stage" aria-hidden="true">
-        <div class="story-stage-inner">
+        <div class="story-stage-inner" data-arrival="visual">
           {chapters.map((chapter, index) => (
             <div class="story-frame" data-frame={index}>
               <div class="window-bar">

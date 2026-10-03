@@ -50,6 +50,7 @@ export function setupSite() {
         disposeMotion = setupMotion(document.querySelector("[data-story]"));
     } catch {
       document.documentElement.removeAttribute("data-intro");
+      document.documentElement.removeAttribute("data-motion-boot");
     }
   };
   // A single shared Anime.js chunk powers the introduction and the full journey.

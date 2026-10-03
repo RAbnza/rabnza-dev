@@ -9,6 +9,7 @@ import fontUrl from "@fontsource-variable/geist/files/geist-latin-wght-normal.wo
 import "@/styles/portfolio.css";
 import "@/styles/experience.css";
 import StartupIntro from "@/components/StartupIntro.astro";
+import { entranceSelector } from "@/lib/motion/targets";
 
 interface Props {
   title?: string;
@@ -79,6 +80,37 @@ const isHome = Astro.url.pathname === "/";
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
+    <style
+      is:inline
+      set:html={`@media screen { html[data-motion-boot="pending"] :is(${entranceSelector}) { opacity: 0; } }`}
+    />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        let preference;
+        try {
+          preference = localStorage.getItem("portfolio-motion-preference");
+        } catch {
+          // Denied storage falls back to the system motion preference.
+        }
+        if (
+          preference === "reduced" ||
+          (preference !== "full" &&
+            matchMedia("(prefers-reduced-motion: reduce)").matches)
+        )
+          return;
+        root.dataset.motionBoot = "pending";
+        // Fail open. A late import must then leave the already visible text alone.
+        const timer = setTimeout(() => {
+          delete root.dataset.motionBoot;
+        }, 1400);
+        document.addEventListener(
+          "portfolio:motion-ready",
+          () => clearTimeout(timer),
+          { once: true },
+        );
+      })();
+    </script>
     {isHome && <script is:inline>
       (() => {
         const root = document.documentElement;

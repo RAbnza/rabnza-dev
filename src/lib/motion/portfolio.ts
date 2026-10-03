@@ -3,12 +3,15 @@ import { observeMotionPreference, shouldReduceMotion } from "./preferences";
 import { setupOpening } from "./opening";
 import { setupJourney } from "./journey";
 import { setupTextReveals } from "./text";
+import { setupCompositions } from "./compositions";
 
-/** Progressive enhancement: content is readable until this scope is ready. */
+/** Progressive enhancement with pre-paint entrance preparation and static fallback. */
 let activeCleanup: (() => void) | undefined;
 export function setupMotion(root: HTMLElement | null) {
   if (activeCleanup) return activeCleanup;
   const seen = new WeakSet<Element>();
+  const progress = new WeakMap<HTMLElement, number>();
+  let prepare = document.documentElement.dataset.motionBoot === "pending";
   let stopText = () => {};
   let disposeScene = () => {};
   let disposed = false;
@@ -17,28 +20,34 @@ export function setupMotion(root: HTMLElement | null) {
   const rebuild = () => {
     disposeScene();
     if (disposed || shouldReduceMotion()) return;
-    const stopJourney = setupJourney();
     const stopStory = root && query.matches ? setupStory(root) : () => {};
+    const stopJourney = setupJourney(prepare);
+    const stopCompositions = setupCompositions(progress, prepare);
     disposeScene = () => {
+      stopCompositions();
       stopStory();
       stopJourney();
     };
   };
   let reduced = shouldReduceMotion();
-  if (!reduced) stopText = setupTextReveals(seen);
+  if (!reduced) stopText = setupTextReveals(seen, prepare);
   // Text owns a document lifetime, independently of responsive scroll geometry.
   const stopOpening = setupOpening();
   const stopPreference = observeMotionPreference(() => {
     const next = shouldReduceMotion();
     if (next === reduced) return;
     reduced = next;
+    // Content has been readable in reduced mode. Enabling motion must not hide it.
+    prepare = false;
     stopText();
-    stopText = next ? () => {} : setupTextReveals(seen);
+    stopText = next ? () => {} : setupTextReveals(seen, false);
     rebuild();
   });
   query.addEventListener("change", rebuild);
   mobileQuery.addEventListener("change", rebuild);
   rebuild();
+  delete document.documentElement.dataset.motionBoot;
+  document.dispatchEvent(new Event("portfolio:motion-ready"));
   activeCleanup = () => {
     if (disposed) return;
     disposed = true;
@@ -141,7 +150,7 @@ function setupStory(root: HTMLElement) {
         chapter.getBoundingClientRect().top + window.scrollY - header - 24,
     );
     lastProgress = -1;
-    schedule();
+    render();
   };
   const observer = new IntersectionObserver(
     (entries) => {

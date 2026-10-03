@@ -763,18 +763,44 @@
   color: var(--violet-ink);
 }
 
-/* About holds its thought while the three paragraphs unfold alongside it. */
+/* A compact editorial column, paired with the existing process markers. */
+.about-copy {
+  align-self: start;
+}
+.about-copy .lead {
+  margin-bottom: 32px;
+  font-size: clamp(20px, 2vw, 26px);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+.about-notes {
+  border-top: 1px solid var(--divider-light);
+}
+.about-note {
+  padding-block: 24px;
+  border-bottom: 1px solid var(--divider-light);
+}
+.about-note h3 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  letter-spacing: 0;
+}
+.about-note p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  max-width: 52ch;
+}
+.about-resume {
+  margin-top: 24px;
+}
 @media (min-width: 64rem) and (min-height: 45rem) {
   [data-journey-motion] .about-statement {
     position: sticky;
     top: calc(var(--header-height) + 48px);
     align-self: start;
-  }
-  [data-journey-motion] .about-copy {
-    padding-top: 80px;
-  }
-  [data-journey-motion] .about-copy > p {
-    margin-bottom: 100px;
   }
   [data-journey-motion] .tech-heading {
     position: sticky;
@@ -1071,6 +1097,25 @@
 .tech-tools li {
   overflow-wrap: anywhere;
 }
-[data-text-motion]:focus-within {
+[data-text-motion]:focus-within,
+.capability:focus-within,
+.project-image-link:focus-within {
   clip-path: none !important;
+  opacity: 1 !important;
+}
+@media screen {
+  [data-text-state="pending"] {
+    opacity: 0 !important;
+  }
+}
+@media print {
+  [data-text-motion],
+  [data-arrival],
+  .capability,
+  .story-inline-media,
+  #more-work .project-image-link {
+    opacity: 1 !important;
+    clip-path: none !important;
+    transform: none !important;
+  }
 }

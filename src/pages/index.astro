@@ -28,8 +28,10 @@ const supporting = (
       aria-labelledby="about-title"
     >
       <div class="about-statement">
-        <p class="eyebrow">01 / The person</p>
-        <h2 id="about-title">
+        <p class="eyebrow" data-arrival="label">
+          01 / The person
+        </p>
+        <h2 id="about-title" data-arrival="title">
           Curiosity first.
           <br />
           <span class="accent-text">Care in the details.</span>
@@ -42,21 +44,30 @@ const supporting = (
         </div>
       </div>
       <div class="about-copy">
-        <p class="lead" data-reveal>
+        <p class="lead" data-arrival="body">
           I’m Rendel Abainza, a Computer Science graduate from the Polytechnic
           University of the Philippines.
         </p>
-        <p data-reveal>
-          I’m looking for my first professional development role, with a focus
-          on full-stack work. I’m interested in both sides of an application:
-          the interface someone uses and the logic and data behind it.
-        </p>
-        <p data-reveal>
-          Away from code, I enjoy drawing, gaming, and listening to OPM. A
-          little curiosity, a little iteration, and a good playlist tend to
-          follow me into whatever I’m making.
-        </p>
-        <a class="text-link" href="/resume/">
+        <div class="about-notes">
+          <div class="about-note" data-arrival="body">
+            <h3>What I’m working toward</h3>
+            <p>
+              I’m looking for my first professional development role, with a
+              focus on full-stack work. I’m interested in both sides of an
+              application: the interface someone uses and the logic and data
+              behind it.
+            </p>
+          </div>
+          <div class="about-note" data-arrival="body">
+            <h3>What keeps me curious</h3>
+            <p>
+              Away from code, I enjoy drawing, gaming, and listening to OPM. A
+              little curiosity, a little iteration, and a good playlist tend to
+              follow me into whatever I’m making.
+            </p>
+          </div>
+        </div>
+        <a class="text-link about-resume" href="/resume/" data-arrival="action">
           View my résumé <Icon name="ArrowUpRight" />
         </a>
       </div>
@@ -70,14 +81,16 @@ const supporting = (
       <div class="container-main">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">02 / The approach & toolkit</p>
-            <h2 id="capabilities-title">
+            <p class="eyebrow" data-arrival="label">
+              02 / The approach & toolkit
+            </p>
+            <h2 id="capabilities-title" data-arrival="title">
               From what you see
               <br />
               to how it works.
             </h2>
           </div>
-          <p class="section-intro">
+          <p class="section-intro" data-arrival="body">
             Three connected layers. One considered experience.
           </p>
         </div>
@@ -127,14 +140,16 @@ const supporting = (
     >
       <div class="section-heading" data-reveal>
         <div>
-          <p class="eyebrow">04 / Further explorations</p>
-          <h2 id="supporting-title">
+          <p class="eyebrow" data-arrival="label">
+            04 / Further explorations
+          </p>
+          <h2 id="supporting-title" data-arrival="title">
             Different problems.
             <br />
             The same curiosity.
           </h2>
         </div>
-        <a class="text-link" href="/projects/">
+        <a class="text-link" href="/projects/" data-arrival="action">
           View all projects <Icon name="ArrowUpRight" />
         </a>
       </div>
@@ -154,17 +169,19 @@ const supporting = (
       <div class="contact-light" aria-hidden="true" data-contact-light></div>
       <div class="container-main contact-grid">
         <div class="contact-copy">
-          <p class="eyebrow">05 / The next chapter</p>
-          <h2 id="contact-title">
+          <p class="eyebrow" data-arrival="label">
+            05 / The next chapter
+          </p>
+          <h2 id="contact-title" data-arrival="title">
             Good work starts
             <br />
             with a conversation<span>.</span>
           </h2>
-          <p>
+          <p data-arrival="body">
             Have a junior developer opportunity or a project in mind? I’d be
             glad to hear about it.
           </p>
-          <div class="contact-details">
+          <div class="contact-details" data-arrival="action">
             <a class="email-link" href={`mailto:${profile.email}`}>
               {profile.email}
               <Icon name="ArrowUpRight" size={20} />

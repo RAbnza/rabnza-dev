@@ -188,7 +188,7 @@ test("mobile viewport stays at scale one throughout scrolling and identity inter
   await context.close();
 });
 
-test("reentry is intentional and responsive rebuilds do not accumulate observers", async ({
+test("text stays settled on reentry and responsive rebuilds do not accumulate observers", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -235,7 +235,6 @@ test("reentry is intentional and responsive rebuilds do not accumulate observers
   await paragraph.scrollIntoViewIfNeeded();
   await expect(paragraph).toHaveAttribute("data-text-state", "settled");
   await tags.scrollIntoViewIfNeeded();
-  await expect(tags).toHaveAttribute("data-text-state", "running");
   await expect(tags).toHaveAttribute("data-text-state", "settled");
   for (let repeat = 0; repeat < 3; repeat++) {
     await page.setViewportSize({ width: 390, height: 844 });

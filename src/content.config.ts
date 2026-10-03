@@ -18,6 +18,7 @@ const projects = defineCollection({
         "frontend",
         "backend",
         "web-application",
+        "desktop-application",
         "website",
         "portfolio",
         "other",
@@ -79,8 +80,8 @@ const projects = defineCollection({
         .default([]),
 
       links: z.object({
-        demo: z.string().url().optional(),
-        source: z.string().url().optional(),
+        demo: z.url().optional(),
+        source: z.url().optional(),
       }),
 
       publication: z.object({

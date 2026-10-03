@@ -25,16 +25,8 @@ technologies:
   - "Supertest"
 
 contribution:
-  role: "Solo developer"
-  teamContext: "Independently designed and implemented as a solo full-stack project."
-  details:
-    - "Designed and implemented the frontend application and user workflows."
-    - "Designed and implemented the backend API, validation, authentication, and role-based authorization."
-    - "Designed the PostgreSQL data model and Prisma persistence layer."
-    - "Implemented transactional sales and inventory movement logic."
-    - "Implemented reporting, audit history, and inventory traceability features."
-    - "Created the frontend and backend test suites."
-    - "Configured and deployed the frontend, backend, and production database."
+  role: "Full-stack portfolio project"
+  teamContext: "A full-stack project presented through its documented architecture and workflows. The descriptions below refer to application behavior; individual ownership of each feature is not independently verified."
 
 cover:
   src: "../../assets/projects/tindatrack/dashboard.png"
@@ -73,7 +65,7 @@ links:
 
 publication:
   published: true
-  homepage: false
+  homepage: true
 ---
 
 TindaTrack is an inventory and sales management application designed for small local retail stores such as sari-sari stores.

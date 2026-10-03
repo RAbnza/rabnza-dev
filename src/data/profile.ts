@@ -4,6 +4,6 @@ export const profile = {
   email: "abainzarendel11@gmail.com",
   github: "https://github.com/RAbnza",
   linkedin: "https://www.linkedin.com/in/rendel-abainza/",
-  graduationYear: "2026",
-  phoneNumber: "+63 966 405 7897",
+  education: "BS Computer Science",
+  university: "Polytechnic University of the Philippines",
 } as const;

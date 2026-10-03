@@ -1,0 +1,25 @@
+---
+import { profile } from "@/data/profile";
+---
+
+<footer class="site-footer container-main">
+  <div>
+    <a class="footer-name" href="/">
+      Rendel Abainza<span aria-hidden="true">.</span>
+    </a>
+    <p>From interface to system.</p>
+  </div>
+  <div class="motion-control" hidden>
+    <label for="motion-preference">Motion</label>
+    <select id="motion-preference">
+      <option value="system">Follow device</option>
+      <option value="full">Full motion</option>
+      <option value="reduced">Reduced motion</option>
+    </select>
+  </div>
+  <div class="footer-links">
+    <a href={profile.github}>GitHub</a>
+    <a href={profile.linkedin}>LinkedIn</a>
+    <a href="/#contact">Contact</a>
+  </div>
+</footer>

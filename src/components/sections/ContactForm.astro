@@ -1,0 +1,91 @@
+---
+import Icon from "@/components/ui/Icon.astro";
+const configured = Boolean(
+  import.meta.env.PUBLIC_EMAILJS_SERVICE_ID &&
+  import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID &&
+  import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY,
+);
+---
+
+<form
+  class="contact-form"
+  data-contact-form
+  aria-labelledby="form-title"
+  method="post"
+>
+  <h3 id="form-title">Leave a message.</h3>
+  <p class="form-intro">A role, an idea, or a simple hello.</p>
+  <div class="form-row">
+    <div class="field">
+      <label for="contact-name">Name</label>
+      <input
+        id="contact-name"
+        name="from_name"
+        autocomplete="name"
+        required
+        maxlength="100"
+        aria-describedby="name-error"
+      />
+      <span id="name-error" class="field-error" data-error="from_name"></span>
+    </div>
+    <div class="field">
+      <label for="contact-email">Email</label>
+      <input
+        id="contact-email"
+        name="reply_to"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength="254"
+        aria-describedby="email-error"
+      />
+      <span id="email-error" class="field-error" data-error="reply_to"></span>
+    </div>
+  </div>
+  <div class="field">
+    <label for="contact-subject">
+      Subject <span>(optional)</span>
+    </label>
+    <input id="contact-subject" name="subject" maxlength="150" />
+  </div>
+  <div class="field">
+    <label for="contact-message">Message</label>
+    <textarea
+      id="contact-message"
+      name="message"
+      rows="4"
+      minlength="10"
+      maxlength="5000"
+      required
+      aria-describedby="message-error"
+    ></textarea>
+    <span id="message-error" class="field-error" data-error="message"></span>
+  </div>
+  <div class="form-trap" aria-hidden="true">
+    <label for="contact-website">Leave this field empty</label>
+    <input
+      id="contact-website"
+      name="website"
+      tabindex="-1"
+      autocomplete="off"
+    />
+  </div>
+  <p class="form-privacy">
+    Your message is used to reply to your enquiry. Please don’t include
+    sensitive information.
+  </p>
+  <button class="button" type="submit" data-send-message disabled>
+    Send message <Icon name="ArrowUpRight" />
+  </button>
+  <p class="form-status" role="status" aria-live="polite" data-form-status>
+    {configured
+      ? ""
+      : "The message form is being connected. For now, please use the email link."}
+  </p>
+  <noscript>
+    <p>
+      Please use the email link to get in touch. Sending this form requires
+      JavaScript.
+    </p>
+  </noscript>
+</form>

@@ -1,0 +1,38 @@
+---
+import IdentityMark from "@/components/ui/IdentityMark.astro";
+import { navigationItems, secondaryNavigationItems } from "@/data/navigation";
+const pathname = Astro.url.pathname;
+const isHome = pathname === "/";
+const projectPage =
+  pathname.startsWith("/projects/") && pathname !== "/projects/";
+const items = isHome ? navigationItems : secondaryNavigationItems;
+---
+
+<header class="site-header" data-site-header>
+  <div class="container-main header-inner">
+    <a class="wordmark" href="/" aria-label="Rendel Abainza, portfolio home">
+      <IdentityMark class="header-mark" />
+      <span>Rendel Abainza</span>
+    </a>
+    <nav aria-label="Main navigation">
+      {items.map((item) => (
+        <a
+          href={item.href}
+          data-nav-section={item.section || undefined}
+          aria-current={
+            !isHome &&
+            (pathname === item.href ||
+              (projectPage && item.label === "Projects"))
+              ? "page"
+              : undefined
+          }
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+  <div class="reading-progress" aria-hidden="true">
+    <span data-reading-progress></span>
+  </div>
+</header>

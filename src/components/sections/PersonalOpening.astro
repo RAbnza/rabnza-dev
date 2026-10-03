@@ -1,0 +1,99 @@
+---
+import Icon from "@/components/ui/Icon.astro";
+---
+
+<section
+  id="home"
+  class="personal-opening container-main"
+  data-opening
+  data-journey="home"
+  aria-labelledby="hero-title"
+>
+  <div class="opening-topline">
+    <p class="eyebrow">Computer Science graduate / Full-stack focus</p>
+    <span class="availability mono">
+      <span aria-hidden="true"></span>Open to opportunities
+    </span>
+  </div>
+  <div class="opening-composition">
+    <div class="opening-identity">
+      <p class="opening-hello mono">Hello, I’m</p>
+      <h1 id="hero-title">
+        Rendel
+        <br />
+        <span>Abainza</span>
+        <i aria-hidden="true">.</i>
+      </h1>
+      <p class="opening-tagline">
+        Useful software.
+        <br /> Thoughtfully built.
+      </p>
+    </div>
+    <div class="identity-lab" data-identity-lab>
+      <div class="lab-grid" aria-hidden="true"></div>
+      <p class="lab-kicker mono">One developer. A few ways of thinking.</p>
+      <div class="identity-stack" aria-hidden="true">
+        <div class="identity-layer" data-identity-layer="interface">
+          <span class="layer-index mono">01 / Interface</span>
+          <Icon name="Layers" size={28} />
+          <div class="layer-drawing drawing-interface">
+            <b></b>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="layer-footer">Make it clear.</span>
+        </div>
+        <div class="identity-layer" data-identity-layer="logic">
+          <span class="layer-index mono">02 / Logic</span>
+          <Icon name="Code2" size={28} />
+          <div class="layer-drawing drawing-logic">
+            <b></b>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="layer-footer">Think it through.</span>
+        </div>
+        <div class="identity-layer" data-identity-layer="data">
+          <span class="layer-index mono">03 / Data</span>
+          <Icon name="Database" size={28} />
+          <div class="layer-drawing drawing-data">
+            <b></b>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="layer-footer">Give it structure.</span>
+        </div>
+      </div>
+      <div
+        class="identity-controls"
+        role="group"
+        aria-label="Explore my development approach"
+        hidden
+      >
+        <button type="button" data-identity-choice="0" aria-pressed="true">
+          Interface
+        </button>
+        <button type="button" data-identity-choice="1" aria-pressed="false">
+          Logic
+        </button>
+        <button type="button" data-identity-choice="2" aria-pressed="false">
+          Data
+        </button>
+      </div>
+      <p class="identity-caption" data-identity-caption aria-live="polite">
+        Clear interfaces. Considered logic. Dependable data.
+      </p>
+    </div>
+  </div>
+  <div class="opening-bottom">
+    <a href="#about">
+      Meet the person behind the work <Icon name="ArrowDown" size={18} />
+    </a>
+    <span class="mono">
+      Scroll to unfold <span aria-hidden="true">↓</span>
+    </span>
+  </div>
+</section>

@@ -1,58 +1,78 @@
-# Rendel Abainza — portfolio
+<img src="public/favicon.svg" width="44" height="44" alt="Rendel Abainza brand mark" />
 
-A personal portfolio built around **Useful software. Thoughtfully built.** A brief branded intro leads into an interactive identity, background, capabilities, a lavender-lit TindaTrack narrative, supporting projects, and contact.
+# Rendel Abainza — Developer portfolio
 
-Astro static pages · strict TypeScript · Tailwind/CSS tokens · Anime.js · Geist · build-time Lucide SVGs. React is used only for server-rendering icons; the site ships no hydrated React islands.
+> Useful software, thoughtfully built.
 
-## Development
+I’m a fresh Computer Science graduate focused on full-stack development. I’m seeking my first professional development role and am open to frontend, backend, software developer, and related entry-level opportunities.
 
-Requires Node **22.12+** and npm. On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
+**[Explore my live portfolio →](https://rabnza-dev.vercel.app/)**
+
+[Résumé](https://rabnza-dev.vercel.app/resume/) · [LinkedIn](https://www.linkedin.com/in/rendel-abainza/) · [Email](mailto:abainzarendel11@gmail.com)
+
+## About me
+
+**Bachelor of Science in Computer Science**<br />
+Polytechnic University of the Philippines · **Graduated Cum Laude**
+
+I’m interested in both sides of an application: the interface someone uses and the logic and data behind it. I aim to build clear workflows, dependable systems, and software whose decisions are easy to understand.
+
+## The portfolio
+
+This repository contains my new personal portfolio, built with **Astro, TypeScript, Tailwind CSS, and Anime.js**. It brings together project case studies, my background, and ways to get in touch.
+
+- Static pages with responsive layouts and self-hosted Geist typography.
+- A cinematic introduction and scroll-driven project storytelling, with reduced-motion and no-JavaScript fallbacks.
+- A detailed TindaTrack case study, supporting work, a project archive, and an online résumé.
+
+## Featured projects
+
+### TindaTrack
+
+A mobile-first inventory and sales application for small local retailers, including sari-sari stores. It connects everyday store workflows with a backend designed around inventory correctness and traceable transactions.
+
+- **Sales integrity:** the server calculates prices and totals, while sales, stock movements, and audit records are committed together.
+- **Traceability and access:** a stock movement ledger explains inventory changes, and the API enforces owner/staff permissions.
+
+**Stack:** React, TypeScript, Vite, Tailwind CSS · Node.js, Express · PostgreSQL, Prisma.
+
+[Live demo](https://tindatrack.pages.dev/) · [Repository](https://github.com/RAbnza/TindaTrack) · [Case study](https://rabnza-dev.vercel.app/projects/tindatrack/)
+
+### Other selected work
+
+| Project                                                                  | What it explores                                                                                                           | Stack                                                           |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [HomeRoom](https://github.com/COMP-016-Web-Development-Group-1/HomeRoom) | A collaborative rental management platform with landlord/tenant views for households, payment tracking, and announcements. | Laravel, PHP, Blade, Tailwind CSS; SQLite for local development |
+| [TravelWise](https://github.com/RAbnza/TravelWise)                       | An academic itinerary planner combining Boyer–Moore search with branch-and-bound activity selection under a budget.        | Java, Swing                                                     |
+
+[Browse all projects](https://rabnza-dev.vercel.app/projects/) for RentEase, the RADMedics website, and earlier portfolio work, or [explore my GitHub repositories](https://github.com/RAbnza?tab=repositories).
+
+## Technologies
+
+| Area               | Technologies                                                  |
+| ------------------ | ------------------------------------------------------------- |
+| Frontend           | HTML, CSS, JavaScript, TypeScript, React, Astro, Tailwind CSS |
+| Backend            | Node.js, Express, PHP, Laravel                                |
+| Databases & ORM    | PostgreSQL, Prisma, SQLite, MySQL                             |
+| Testing            | Vitest, React Testing Library, Supertest, Playwright          |
+| Tools & motion     | Git, Vite, Anime.js                                           |
+| Other technologies | Java, Swing, JavaFX, Python                                   |
+
+## Run this portfolio locally
+
+Requires **Node.js 22.12+** and npm.
 
 ```sh
 npm ci
 npm run astro -- dev --background
-npm run astro -- dev status
-npm run astro -- dev logs
-npm run astro -- dev stop
 ```
 
-The background development server runs at `http://localhost:4321`.
+The development server runs at `http://localhost:4321`. In Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
 
-## Verification
+See the [development guide](docs/DEVELOPMENT.md) for server management, verification, project structure, content updates, and deployment configuration.
 
-```sh
-npm run build
-npm run lint
-npm run format:check
-npm test
-```
+## Get in touch
 
-Playwright tests the **built `dist/` site**, automatically serving it on `127.0.0.1:4322`. The test configuration uses installed Microsoft Edge. On a machine without Edge, install Playwright Chromium (`npx playwright install chromium`) and remove `channel: "msedge"` in `playwright.config.ts`. Browser tests cover routes/images, 320–1920px reflow, startup and identity interaction, chapter motion and preferences, navigation, no-JS fallback, enlarged text, keyboard access, clipboard interaction, form validation and mocked delivery, and axe accessibility checks. No test sends real email.
+Have a junior developer opportunity or a project in mind? I’d be glad to hear about it.
 
-`npm run test:motion` runs motion-related journeys. `npm run test:performance` builds and runs repeatable throttled Chromium measurements and asset budgets. Reports and screenshots are written to ignored `artifacts/`, `test-results/`, and `playwright-report/` directories. See [QA results](docs/QA.md) for measured results and limitations.
-
-## Structure
-
-- `src/content/projects/`: validated Markdown for all six projects.
-- `src/data/`: profile, navigation, and evidence-linked capabilities.
-- `src/layouts/`: shared document and project layouts.
-- `src/components/`: header/footer, static UI, flagship narrative, and engineering detail.
-- `src/lib/motion/`: intro, identity interaction, scroll scenes, and persistent motion preferences.
-- `src/lib/contact.ts`: validated EmailJS submission with timeout and retry states.
-- `src/styles/`: finalized tokens and responsive editorial styles.
-- `src/assets/`: authentic project media optimized by Astro.
-- `public/`: favicon, social preview, font license, and optional approved résumé.
-- `tests/browser/`: production browser regression journeys.
-- `scripts/`: local build server, brand artwork generation, and visual review utilities.
-
-## Content and deployment
-
-Start with [the owner checklist](docs/HUMAN_INTERVENTION_REQUIRED.md). EmailJS configuration, the approved PDF, precise personal contribution details, and final Vercel/domain configuration require owner input. Direct email and the online résumé remain available while these are pending.
-
-Set `PUBLIC_SITE_URL` to the final HTTPS production origin before the production build. Without it, the site remains nonindexable; Vercel previews always remain nonindexable. Canonical URLs, social metadata, robots, and the collection-driven sitemap update at build time. `vercel.json` is ready for a new Vercel project. No backend or deployment credentials are included.
-
-For the contact form, configure `PUBLIC_EMAILJS_SERVICE_ID`, `PUBLIC_EMAILJS_TEMPLATE_ID`, and `PUBLIC_EMAILJS_PUBLIC_KEY` in a local uncommitted `.env` and the deployment environment, then rebuild. These are intentionally public browser identifiers; never add a private key. The owner checklist describes the recipient, template variables, domain restrictions, and real-delivery verification. Until configured, the form explains its status and keeps Send disabled.
-
-Place an approved PDF at `public/resume/rendel-abainza-resume.pdf` and rebuild to enable the download automatically. To add a project, add a collection entry and local media; publication flags drive routes, archive, sitemap, and supporting homepage features.
-
-Read [architecture and motion](docs/ARCHITECTURE.md), [content provenance](docs/CONTENT_EVIDENCE.md), [asset conventions](docs/assets.md), and the original [development context](docs/PORTFOLIO_PROJECT_DEVELOPMENT_CONTEXT.md). The planning context is preserved; implementation deviations are explained in the architecture notes.
+[abainzarendel11@gmail.com](mailto:abainzarendel11@gmail.com) · [LinkedIn](https://www.linkedin.com/in/rendel-abainza/) · [GitHub](https://github.com/RAbnza)

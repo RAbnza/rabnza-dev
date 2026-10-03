@@ -1,0 +1,95 @@
+---
+import { existsSync } from "node:fs";
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/ui/Icon.astro";
+import { profile } from "@/data/profile";
+const hasResume = existsSync(
+  new URL("../../public/resume/rendel-abainza-resume.pdf", import.meta.url),
+);
+const projects = (
+  await getCollection("projects", ({ data }) => data.featured)
+).sort((a, b) => a.data.priority - b.data.priority);
+---
+
+<BaseLayout
+  title="Résumé — Rendel Abainza"
+  description="Rendel Abainza: Computer Science graduate seeking junior developer opportunities. Education, selected projects, and contact information."
+>
+  <main id="main-content" class="container-main">
+    <header class="page-heading">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="/">Portfolio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Résumé</span>
+      </nav>
+      <p class="eyebrow">Background / Résumé</p>
+      <h1>
+        Rendel Abainza<span class="accent-text">.</span>
+      </h1>
+      <p class="lead">
+        Computer Science graduate pursuing entry-level full-stack, frontend,
+        backend, and software development opportunities.
+      </p>
+      <div class="actions">
+        {hasResume ? (
+          <a class="button" href="/resume/rendel-abainza-resume.pdf" download>
+            Download résumé <Icon name="Download" />
+          </a>
+        ) : (
+          <a
+            class="button"
+            href={`mailto:${profile.email}?subject=Resume%20request`}
+          >
+            Request PDF résumé <Icon name="Mail" />
+          </a>
+        )}
+        <a class="text-link" href={profile.github}>
+          GitHub <Icon name="ArrowUpRight" />
+        </a>
+        <a class="text-link" href={profile.linkedin}>
+          LinkedIn <Icon name="ArrowUpRight" />
+        </a>
+      </div>
+    </header>
+    <section class="resume-section">
+      <h2>Profile</h2>
+      <p>
+        A developer focused on usable interfaces and dependable application
+        logic. My portfolio includes inventory and sales software, rental
+        management applications, and algorithm-based travel planning. I am
+        seeking my first professional development role.
+      </p>
+    </section>
+    <section class="resume-section">
+      <h2>Education</h2>
+      <h3 style="font-size:20px">{profile.education}</h3>
+      <p>{profile.university}</p>
+      <p>Graduate</p>
+    </section>
+    <section class="resume-section">
+      <h2>Selected project work</h2>
+      {projects.map((project) => (
+        <article class="resume-project">
+          <h3>
+            <a class="text-link" href={`/projects/${project.id}/`}>
+              {project.data.title} <Icon name="ArrowUpRight" size={16} />
+            </a>
+          </h3>
+          <p>{project.data.summary}</p>
+          <ul class="tags">
+            {project.data.technologies.slice(0, 6).map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </section>
+    <section class="resume-section">
+      <h2>Contact</h2>
+      <a class="text-link" href={`mailto:${profile.email}`}>
+        {profile.email}
+      </a>
+    </section>
+  </main>
+</BaseLayout>

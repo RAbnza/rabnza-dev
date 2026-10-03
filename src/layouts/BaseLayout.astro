@@ -1,14 +1,30 @@
 ---
 import "@/styles/global.css";
 import { siteConfig } from "@/data/site";
+import { siteOrigin, isIndexable } from "@/data/site";
+import { profile } from "@/data/profile";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import fontUrl from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import "@/styles/portfolio.css";
+import "@/styles/experience.css";
+import StartupIntro from "@/components/StartupIntro.astro";
 
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const { title = siteConfig.title, description = siteConfig.description } =
   Astro.props;
+const canonical = siteOrigin
+  ? new URL(Astro.url.pathname, siteOrigin).href
+  : undefined;
+const socialImage = siteOrigin
+  ? new URL("/social-card.png", siteOrigin).href
+  : undefined;
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -18,13 +34,89 @@ const { title = siteConfig.title, description = siteConfig.description } =
     <meta name="viewport" content="width=device-width" />
 
     <meta name="description" content={description} />
-
+    <meta name="theme-color" content="#f7f7fa" />
+    <meta
+      name="robots"
+      content={
+        isIndexable && !Astro.props.noindex
+          ? "index, follow"
+          : "noindex, nofollow"
+      }
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link
+      rel="preload"
+      href={fontUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta
+      property="og:image:alt"
+      content="Rendel Abainza — Useful software, thoughtfully built."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: profile.name,
+        ...(siteOrigin ? { url: siteOrigin } : {}),
+        sameAs: [profile.github, profile.linkedin],
+        alumniOf: { "@type": "CollegeOrUniversity", name: profile.university },
+      }).replace(/</g, "\\u003c")}
+    />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
+    {isHome && <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        try {
+          const preference = localStorage.getItem(
+            "portfolio-motion-preference",
+          );
+          if (
+            location.hash ||
+            preference === "reduced" ||
+            (preference !== "full" &&
+              matchMedia("(prefers-reduced-motion: reduce)").matches)
+          )
+            return;
+          root.dataset.intro = "pending";
+          root.dataset.returning = sessionStorage.getItem("portfolio-visited")
+            ? "true"
+            : "false";
+          sessionStorage.setItem("portfolio-visited", "true");
+        } catch {
+          root.removeAttribute("data-intro");
+          return;
+        }
+        const finish = () => root.removeAttribute("data-intro");
+        setTimeout(finish, 1400);
+        document.addEventListener("keydown", finish, { once: true });
+        document.addEventListener("pointerdown", (event) => {
+          if (event.target.closest("[data-skip-intro]")) finish();
+        });
+        window.addEventListener("pageshow", (event) => {
+          if (event.persisted) finish();
+        });
+      })();
+    </script>}
   </head>
 
   <body>
+    {isHome && <StartupIntro />}
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:left-5 focus:top-5 focus:z-50 focus:rounded-sm focus:bg-background focus:px-4 focus:py-3 focus:text-foreground focus:shadow-sm"
@@ -32,6 +124,13 @@ const { title = siteConfig.title, description = siteConfig.description } =
       Skip to main content
     </a>
 
+    <SiteHeader />
     <slot />
+    <SiteFooter />
   </body>
 </html>
+
+<script>
+  import { setupSite } from "@/lib/site";
+  setupSite();
+</script>

@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectCard from "@/components/ui/ProjectCard.astro";
+const projects = (
+  await getCollection("projects", ({ data }) => data.publication.published)
+).sort((a, b) => a.data.priority - b.data.priority);
+---
+
+<BaseLayout
+  title="Projects — Rendel Abainza"
+  description="Selected applications, websites, and earlier work by Rendel Abainza, with real interfaces and engineering context."
+>
+  <main id="main-content" class="container-main">
+    <header class="page-heading">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="/">Portfolio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Projects</span>
+      </nav>
+      <p class="eyebrow">The work / 01–06</p>
+      <h1>
+        Interfaces with
+        <br />
+        <span class="accent-text">something behind them.</span>
+      </h1>
+      <p class="lead">
+        A collection of applications, websites, and earlier explorations. Start
+        with TindaTrack, or take a look through the archive.
+      </p>
+    </header>
+    <div class="project-grid section" style="padding-top:0">
+      {projects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  </main>
+</BaseLayout>

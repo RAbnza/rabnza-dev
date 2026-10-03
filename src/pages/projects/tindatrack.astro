@@ -1,269 +1,110 @@
 ---
-import { getEntry, render } from "astro:content";
-
-import CaseStudyChapter from "@/components/sections/CaseStudyChapter.astro";
-import TindaTrackEngineering from "@/components/sections/TindaTrackEngineering.astro";
-import TindaTrackFlagshipSequence from "@/components/sections/TindaTrackFlagshipSequence.astro";
-import TindaTrackReviewHandoff from "@/components/sections/TindaTrackReviewHandoff.astro";
+import { getEntry } from "astro:content";
+import ProjectLayout from "@/layouts/ProjectLayout.astro";
 import ProjectMedia from "@/components/ui/ProjectMedia.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-
-const project = await getEntry("projects", "tindatrack");
-
-if (!project) {
-  throw new Error("TindaTrack project entry could not be found.");
-}
-
-const { Content } = await render(project);
-
-const { title, summary, technologies, contribution, cover, gallery, links } =
-  project.data;
-
-const sellMedia = gallery.find((item) => item.role === "sell");
-const receiptMedia = gallery.find((item) => item.role === "receipt");
-const trackMedia = gallery.find((item) => item.role === "track");
-const auditMedia = gallery.find((item) => item.role === "audit");
-const reviewMedia = gallery.find((item) => item.role === "review");
+import TindaTrackEngineering from "@/components/sections/TindaTrackEngineering.astro";
+const project = (await getEntry("projects", "tindatrack"))!;
+const chapters = [
+  {
+    id: "sell",
+    title: "Record a sale.",
+    description:
+      "The interface collects products, quantities, and a payment method. The server validates the order and returns the recorded transaction.",
+    roles: ["sell", "receipt"],
+  },
+  {
+    id: "track",
+    title: "Follow the inventory.",
+    description:
+      "Signed movements connect stock changes to the operation that caused them. Audit records add the actor, time, and affected entity.",
+    roles: ["track", "audit"],
+  },
+  {
+    id: "review",
+    title: "Review the day.",
+    description:
+      "Daily reporting brings completed transactions and their line items into one view. These screenshots contain demonstration data.",
+    roles: ["review"],
+  },
+];
 ---
 
-<BaseLayout title={`${title} — Rendel Abainza`} description={summary}>
-  <main id="main-content">
-    <article data-tindatrack-case-study>
-      <header class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
-        <div class="container-main">
-          <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
-            Flagship project
-          </p>
-
-          <h1 class="mt-4 max-w-5xl text-5xl font-semibold tracking-[-0.04em] text-balance sm:text-6xl lg:text-7xl">
-            {title}
-          </h1>
-
-          <p class="mt-6 max-w-[68ch] text-lg leading-relaxed text-muted-foreground md:text-xl">
-            {summary}
-          </p>
-
-          <div class="mt-8 flex flex-wrap gap-3">
-            {links.demo && (
-              <a
-                href={links.demo}
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex min-h-12 items-center justify-center rounded-sm bg-primary px-5 py-3 font-medium text-primary-foreground"
-              >
-                View live demo
-              </a>
-            )}
-
-            {links.source && (
-              <a
-                href={links.source}
-                target="_blank"
-                rel="noreferrer"
-                class="inline-flex min-h-12 items-center justify-center rounded-sm border border-input bg-background px-5 py-3 font-medium"
-              >
-                View source
-              </a>
-            )}
-          </div>
-        </div>
-      </header>
-
-      {cover && (
-        <div class="container-wide px-5 md:px-8 lg:px-12">
-          <ProjectMedia
-            src={cover.src}
-            alt={cover.alt}
-            caption={cover.caption}
-            sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 64px), min(1360px, calc(100vw - 96px))"
-          />
-        </div>
-      )}
-
-      <section class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
-        <div class="container-main grid gap-12 lg:grid-cols-12 lg:gap-8">
-          <div class="lg:col-span-4">
-            <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
-              Contribution
+<ProjectLayout project={project}>
+  <div class="container-main">
+    {chapters.map((chapter, index) => (
+      <section id={chapter.id} class="case-chapter">
+        <div class="case-chapter-header" data-reveal>
+          <div>
+            <p class="eyebrow">
+              0{index + 1} / {chapter.id}
             </p>
-
-            <h2 class="mt-3 text-3xl font-semibold tracking-[-0.03em]">
-              Built independently, end to end.
-            </h2>
+            <h2>{chapter.title}</h2>
           </div>
-
-          <div class="lg:col-span-7 lg:col-start-6">
-            {contribution.teamContext && (
-              <p class="text-lg leading-relaxed text-muted-foreground">
-                {contribution.teamContext}
-              </p>
-            )}
-
-            <ul class="mt-8 space-y-4">
-              {contribution.details.map((detail) => (
-                <li class="border-l border-divider-light pl-4 leading-relaxed">
-                  {detail}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p>{chapter.description}</p>
         </div>
-      </section>
-
-      <section class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
-        <div class="container-main">
-          <div class="reading-width">
-            <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
-              Overview
-            </p>
-
-            <div class="mt-6 space-y-6 text-lg leading-relaxed text-muted-foreground">
-              <Content />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {sellMedia && trackMedia && (
-        <TindaTrackFlagshipSequence
-          sell={{
-            src: sellMedia.src,
-            alt: sellMedia.alt,
-            caption: sellMedia.caption,
-          }}
-          receipt={
-            receiptMedia
-              ? {
-                  src: receiptMedia.src,
-                  alt: receiptMedia.alt,
-                  caption: receiptMedia.caption,
-                }
-              : undefined
-          }
-          track={{
-            src: trackMedia.src,
-            alt: trackMedia.alt,
-            caption: trackMedia.caption,
-          }}
-        />
-      )}
-
-      {sellMedia && trackMedia && reviewMedia && <TindaTrackReviewHandoff />}
-
-      {reviewMedia && (
-        <CaseStudyChapter
-          eyebrow="03 — Review"
-          motionId="review"
-          title="Bring operational history back into view."
-          description="Daily sales reporting, stock movements, and audit history provide evidence that can be reviewed after the original transaction has completed."
-        >
-          <div class="space-y-8">
-            <ProjectMedia
-              src={reviewMedia.src}
-              alt={reviewMedia.alt}
-              caption={reviewMedia.caption}
-            />
-
-            {auditMedia && (
+        <div class="case-gallery">
+          {project.data.gallery
+            .filter((media) => chapter.roles.includes(media.role))
+            .map((media) => (
               <ProjectMedia
-                src={auditMedia.src}
-                alt={auditMedia.alt}
-                caption={auditMedia.caption}
+                src={media.src}
+                alt={media.alt}
+                caption={media.caption}
+                sizes="(min-width: 1280px) 1100px, 90vw"
               />
-            )}
-          </div>
-        </CaseStudyChapter>
-      )}
-
-      <TindaTrackEngineering />
-
-      <section class="px-5 py-20 md:px-8 md:py-24 lg:px-12 lg:py-32">
-        <div class="container-main grid gap-12 lg:grid-cols-12">
-          <div class="lg:col-span-4">
-            <p class="font-mono text-xs tracking-[0.08em] text-violet-ink uppercase">
-              Technology
-            </p>
-
-            <h2 class="mt-3 text-3xl font-semibold tracking-[-0.03em]">
-              Full-stack implementation.
-            </h2>
-          </div>
-
-          <ul class="flex flex-wrap gap-2 lg:col-span-7 lg:col-start-6">
-            {technologies.map((technology) => (
-              <li class="rounded-full border border-border bg-card px-3 py-2 text-sm">
-                {technology}
-              </li>
             ))}
-          </ul>
         </div>
       </section>
-    </article>
-  </main>
-</BaseLayout>
-
-<script>
-  import { setupCaseStudyMotion } from "@/lib/motion/case-study";
-  import { setupTindaTrackReviewHandoff } from "@/lib/motion/tindatrack-review-handoff";
-  import { setupTindaTrackSequence } from "@/lib/motion/tindatrack-sequence";
-
-  let disposeMotion: (() => void) | undefined;
-
-  function initializeTindaTrackMotion() {
-    disposeMotion?.();
-    disposeMotion = undefined;
-
-    const root = document.querySelector<HTMLElement>(
-      "[data-tindatrack-case-study]",
-    );
-
-    if (!root) {
-      return;
-    }
-
-    const scopes: Array<{ revert: () => void }> = [];
-
-    const caseStudyScope = setupCaseStudyMotion(root);
-
-    if (caseStudyScope) {
-      scopes.push(caseStudyScope);
-    }
-
-    const sequenceRoot = root.querySelector<HTMLElement>(
-      "[data-tindatrack-sequence]",
-    );
-
-    if (sequenceRoot) {
-      const sequenceScope = setupTindaTrackSequence(sequenceRoot);
-
-      if (sequenceScope) {
-        scopes.push(sequenceScope);
-      }
-    }
-
-    const reviewHandoff = root.querySelector<HTMLElement>(
-      "[data-review-handoff]",
-    );
-
-    if (reviewHandoff) {
-      const reviewHandoffScope = setupTindaTrackReviewHandoff(reviewHandoff);
-
-      if (reviewHandoffScope) {
-        scopes.push(reviewHandoffScope);
-      }
-    }
-
-    if (scopes.length === 0) {
-      return;
-    }
-
-    disposeMotion = () => {
-      scopes.forEach((scope) => scope.revert());
-      disposeMotion = undefined;
-    };
+    ))}
+  </div>
+  <div id="engineering">
+    <TindaTrackEngineering />
+  </div>
+  <section class="container-main section prose">
+    <h2>Decisions and tradeoffs</h2>
+    <p>
+      A modular monolith keeps business rules in the service layer without the
+      deployment complexity of distributed services. A movement ledger preserves
+      traceability, at the cost of deriving inventory from history rather than
+      reading a freely editable stock field.
+    </p>
+    <p>
+      Serializable transactions protect the sale boundary under contention.
+      Retry logic handles retryable conflicts, while insufficient stock remains
+      a validation failure. Historical sale prices are stored on line items so
+      later price changes do not rewrite receipts.
+    </p>
+    <h2>Validation and limitations</h2>
+    <p>
+      The repository contains frontend workflow tests and backend integration
+      tests, including competing sales for the last unit. Source and test code
+      were reviewed during planning; the TindaTrack test suite was not executed
+      for this portfolio. The example above shows the test’s expected invariant,
+      not a new benchmark result.
+    </p>
+    <p>
+      This is a single-store MVP and demonstration deployment. It does not claim
+      real customers, business impact, accounting completeness, or
+      production-scale load testing. Accounting, payroll, e-commerce, and
+      multi-tenant SaaS are outside its scope.
+    </p>
+    <h2>What the project demonstrates</h2>
+    <p>
+      Interface simplicity depends on clear system boundaries. Server-owned
+      prices, atomic sales, and traceable stock changes let the interface stay
+      focused on the user's task while preserving evidence behind each
+      operation.
+    </p>
+  </section>
+</ProjectLayout>
+<style>
+  .case-gallery {
+    display: grid;
+    gap: 32px;
   }
-
-  document.addEventListener("astro:before-swap", () => disposeMotion?.());
-  document.addEventListener("astro:page-load", initializeTindaTrackMotion);
-  initializeTindaTrackMotion();
-</script>
+  .case-gallery :global(img) {
+    max-height: 740px;
+    width: 100%;
+    object-fit: contain;
+  }
+</style>

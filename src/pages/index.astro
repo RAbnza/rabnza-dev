@@ -1,23 +1,193 @@
 ---
+import { getCollection, getEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Icon from "@/components/ui/Icon.astro";
+import ProjectCard from "@/components/ui/ProjectCard.astro";
+import PersonalOpening from "@/components/sections/PersonalOpening.astro";
+import FlagshipStory from "@/components/sections/FlagshipStory.astro";
+import ContactForm from "@/components/sections/ContactForm.astro";
+import { profile } from "@/data/profile";
+import { capabilities } from "@/data/capabilities";
+const flagship = (await getEntry("projects", "tindatrack"))!;
+const supporting = (
+  await getCollection(
+    "projects",
+    ({ data, id }) => data.publication.homepage && id !== "tindatrack",
+  )
+).sort((a, b) => a.data.priority - b.data.priority);
 ---
 
 <BaseLayout>
   <main id="main-content">
-    <section class="min-h-screen px-5 py-16 md:px-8 md:py-24 lg:px-12 lg:py-32">
+    <PersonalOpening />
+    <section
+      id="about"
+      class="section container-main about-grid journey-section"
+      data-journey="about"
+      aria-labelledby="about-title"
+    >
+      <div class="about-statement">
+        <p class="eyebrow">01 / The person</p>
+        <h2 id="about-title">
+          Curiosity first.
+          <br />
+          <span class="accent-text">Care in the details.</span>
+        </h2>
+        <div class="about-thread" aria-hidden="true">
+          <span data-thread-line></span>
+          <span class="mono">Observe</span>
+          <span class="mono">Understand</span>
+          <span class="mono">Build</span>
+        </div>
+      </div>
+      <div class="about-copy">
+        <p class="lead" data-reveal>
+          I’m Rendel Abainza, a Computer Science graduate from the Polytechnic
+          University of the Philippines.
+        </p>
+        <p data-reveal>
+          I’m looking for my first professional development role, with a focus
+          on full-stack work. I’m interested in both sides of an application:
+          the interface someone uses and the logic and data behind it.
+        </p>
+        <p data-reveal>
+          Away from code, I enjoy drawing, gaming, and listening to OPM. A
+          little curiosity, a little iteration, and a good playlist tend to
+          follow me into whatever I’m making.
+        </p>
+        <a class="text-link" href="/resume/">
+          View my résumé <Icon name="ArrowUpRight" />
+        </a>
+      </div>
+    </section>
+    <section
+      id="capabilities"
+      class="capabilities-section section journey-section"
+      data-journey="capabilities"
+      aria-labelledby="capabilities-title"
+    >
       <div class="container-main">
-        <p class="font-mono text-xs tracking-[0.08em] text-muted-foreground uppercase">
-          Portfolio foundation
-        </p>
-
-        <h1 class="mt-4 max-w-4xl text-4xl font-semibold tracking-[-0.04em] text-balance sm:text-5xl lg:text-6xl">
-          Useful software, thoughtfully built.
-        </h1>
-
-        <p class="mt-6 max-w-[68ch] text-lg leading-relaxed text-muted-foreground">
-          The project foundation is ready. Portfolio content and major
-          interactions will be implemented in later development phases.
-        </p>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 / The approach</p>
+            <h2 id="capabilities-title">
+              From what you see
+              <br />
+              to how it works.
+            </h2>
+          </div>
+          <p class="section-intro">
+            Three connected layers. One considered experience.
+          </p>
+        </div>
+        <div class="capability-grid">
+          {capabilities.map((item, i) => (
+            <article class="capability" data-capability>
+              <div class="capability-top">
+                <Icon name={item.icon} size={24} />
+                <span class="mono">0{i + 1}</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <ul class="tags">
+                {item.technologies.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+              <a class="text-link" href={item.href}>
+                {item.evidence} <Icon name="ArrowUpRight" size={16} />
+              </a>
+            </article>
+          ))}
+        </div>
+        <div class="approach-outro">
+          <span class="mono">Ideas → Interfaces → Systems</span>
+          <a class="text-link" href="#work">
+            Put into practice <Icon name="ArrowDown" size={16} />
+          </a>
+        </div>
+      </div>
+    </section>
+    <div class="work-bridge" aria-hidden="true">
+      <div data-environment-light></div>
+      <span class="mono">And here’s what that looks like.</span>
+    </div>
+    <FlagshipStory project={flagship} />
+    <section
+      id="more-work"
+      class="section container-main journey-section"
+      data-journey="more-work"
+      aria-labelledby="supporting-title"
+    >
+      <div class="section-heading" data-reveal>
+        <div>
+          <p class="eyebrow">04 / Further explorations</p>
+          <h2 id="supporting-title">
+            Different problems.
+            <br />
+            The same curiosity.
+          </h2>
+        </div>
+        <a class="text-link" href="/projects/">
+          View all projects <Icon name="ArrowUpRight" />
+        </a>
+      </div>
+      <div class="project-grid">
+        {supporting.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+    <section
+      id="contact"
+      class="contact-section journey-section"
+      data-journey="contact"
+      aria-labelledby="contact-title"
+    >
+      <div class="contact-orbit" aria-hidden="true" data-contact-orbit></div>
+      <div class="container-main contact-grid">
+        <div class="contact-copy">
+          <p class="eyebrow">05 / The next chapter</p>
+          <h2 id="contact-title">
+            Good work starts
+            <br />
+            with a conversation<span>.</span>
+          </h2>
+          <p>
+            Have a junior developer opportunity or a project in mind? I’d be
+            glad to hear about it.
+          </p>
+          <div class="contact-details">
+            <a class="email-link" href={`mailto:${profile.email}`}>
+              {profile.email}
+              <Icon name="ArrowUpRight" size={20} />
+            </a>
+            <button
+              class="text-link copy-button"
+              type="button"
+              data-copy-email={profile.email}
+              hidden
+            >
+              <Icon name="Copy" size={16} />
+              Copy email address
+            </button>
+            <p
+              class="copy-status"
+              data-copy-status
+              role="status"
+              aria-live="polite"
+            ></p>
+            <div class="contact-socials">
+              <a class="text-link" href={profile.github}>
+                GitHub <Icon name="ArrowUpRight" size={16} />
+              </a>
+              <a class="text-link" href={profile.linkedin}>
+                LinkedIn <Icon name="ArrowUpRight" size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+        <ContactForm />
       </div>
     </section>
   </main>

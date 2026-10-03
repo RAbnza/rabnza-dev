@@ -2,3 +2,8 @@ dist
 .astro
 node_modules
 package-lock.json
+test-results
+playwright-report
+artifacts
+public/GEIST-LICENSE.txt
+docs/PORTFOLIO_PROJECT_DEVELOPMENT_CONTEXT.md

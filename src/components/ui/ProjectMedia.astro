@@ -8,6 +8,7 @@ interface Props {
   dark?: boolean;
   sizes?: string;
   hideCaption?: boolean;
+  eager?: boolean;
 }
 
 const {
@@ -17,6 +18,7 @@ const {
   dark = false,
   sizes = "(max-width: 1023px) calc(100vw - 40px), 58vw",
   hideCaption = false,
+  eager = false,
 } = Astro.props;
 ---
 
@@ -34,6 +36,8 @@ const {
       alt={alt}
       widths={[480, 640, 960, 1280, 1600]}
       sizes={sizes}
+      loading={eager ? "eager" : "lazy"}
+      fetchpriority={eager ? "high" : "auto"}
     />
   </div>
 

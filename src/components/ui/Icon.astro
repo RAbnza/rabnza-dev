@@ -1,0 +1,32 @@
+---
+import {
+  ArrowUpRight,
+  ArrowRight,
+  ArrowDown,
+  Code2,
+  Database,
+  Layers,
+  Mail,
+  Copy,
+  Download,
+} from "lucide-react";
+const icons = {
+  ArrowUpRight,
+  ArrowRight,
+  ArrowDown,
+  Code2,
+  Database,
+  Layers,
+  Mail,
+  Copy,
+  Download,
+};
+interface Props {
+  name: keyof typeof icons;
+  size?: number;
+}
+const { name, size = 20 } = Astro.props;
+const Component = icons[name];
+---
+
+<Component size={size} strokeWidth={1.75} aria-hidden="true" />

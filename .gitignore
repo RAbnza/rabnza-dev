@@ -22,3 +22,11 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+test-results/
+playwright-report/
+artifacts/
+
+
+HUMAN_INTERVENTION_REQUIRED.md
+QA.md
+CONTENT_EVIDENCE.md
